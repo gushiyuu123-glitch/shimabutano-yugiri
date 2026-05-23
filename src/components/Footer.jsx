@@ -10,10 +10,17 @@ const LOGO = [
 ];
 
 export default function Footer({
-  phone = "098-917-2038",
-  mapUrl = "https://www.google.com/maps?q=%E6%B2%96%E7%B8%84%E7%9C%8C%E9%82%A3%E8%A6%87%E5%B8%82%E7%89%A7%E5%BF%972-7-18",
+  // ✅ 架空なら「実在番号っぽいもの」は避ける
+  phone = "098-000-1234",
+
+  // ✅ 番地ピンではなく “牧志エリア検索” にする（誤認防止）
+  mapUrl = "https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87%20%E7%89%A7%E5%BF%97",
+
   instaUrl = "https://www.instagram.com/",
-  address = "沖縄県那覇市牧志2-7-18 2F（路地側）",
+
+  // ✅ 番地は出さない。粒度は「那覇・牧志」まで。
+  address = "沖縄県那覇市 牧志（国際通り付近）",
+
   hours = "17:30–22:30（最終入店 20:30） / 水曜休",
   creditUrl = "https://gushikendesign.com/",
 }) {
@@ -60,12 +67,22 @@ export default function Footer({
             )}
             <span className={styles.sep} aria-hidden="true">／</span>
 
-            <a className={styles.link} href={mapUrl} target="_blank" rel="noreferrer noopener">
+            <a
+              className={styles.link}
+              href={mapUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
               MAP
             </a>
             <span className={styles.sep} aria-hidden="true">／</span>
 
-            <a className={styles.link} href={instaUrl} target="_blank" rel="noreferrer noopener">
+            <a
+              className={styles.link}
+              href={instaUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
               INSTAGRAM
             </a>
           </nav>
@@ -74,12 +91,10 @@ export default function Footer({
         <div className={styles.bottom}>
           <span className={styles.bottomRule} aria-hidden="true" />
 
-          {/* 著作権コピー（最小で強い） */}
           <p className={styles.copy}>
             © {new Date().getFullYear()} SHIMABUTA NO YUGIRI. All rights reserved.
           </p>
 
-          {/* 本拠地クレジット（出番を奪わない） */}
           <a
             className={styles.credit}
             href={creditUrl}

@@ -4,21 +4,34 @@ import styles from "./Info.module.css";
 
 export default function Info({
   id = "info",
-  phone = "098-917-2038",
-  mapUrl = "https://www.google.com/maps?q=%E6%B2%96%E7%B8%84%E7%9C%8C%E9%82%A3%E8%A6%87%E5%B8%82%E7%89%A7%E5%BF%972-7-18",
+
+  // ✅ 架空なら「実在っぽい番号」を避ける
+  phone = "098-000-1234",
+
+  // ✅ 番地ピンではなく “牧志エリア検索”
+  mapUrl = "https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87%20%E7%89%A7%E5%BF%97%20%E5%9B%BD%E9%9A%9B%E9%80%9A%E3%82%8A",
+
+  // ✅ 番地は出さない（粒度：那覇・牧志）
   address = {
-    postal: "〒900-0013",
-    line1: "沖縄県那覇市牧志2丁目7-18 2F",
-    line2: "国際通りから徒歩4分（路地側）",
+    postal: "",
+    line1: "沖縄県那覇市 牧志（国際通り付近）",
+    line2: "",
   },
+
   hours = {
     weekday: "平日　　17:30 – 22:30（最終入店 20:30）",
     holiday1: "土日祝　11:30 – 14:30（最終入店 13:30）",
     holiday2: "　　　　17:30 – 22:30（最終入店 20:30）",
   },
+
   closed = "水曜日",
-  access = ["ゆいレール 牧志駅より徒歩7分", "那覇空港から車で約18分"],
-  parking = ["専用2台（満車時は近隣P）", "近隣コインP 徒歩2分圏内"],
+
+  // ✅ 地名/距離は“付近”で成立させる（番地なしでOK）
+  access = ["ゆいレール 牧志駅より徒歩圏内", "那覇空港から車で約20分前後"],
+
+  // ✅ “専用◯台”みたいな断言は避ける
+  parking = ["専用駐車場はございません", "近隣コインPをご利用ください"],
+
   marks = ["入口は路地側", "看板は小さめ", "迷ったら電話"],
 }) {
   const rootRef = useRef(null);
@@ -99,6 +112,12 @@ export default function Info({
     return () => cancelAnimationFrame(raf);
   }, [inView]);
 
+  // ✅ 空文字を出さない（余計な空行で“雑”が出るのを防ぐ）
+  const addrLines = useMemo(
+    () => [address?.postal, address?.line1, address?.line2].filter(Boolean),
+    [address]
+  );
+
   return (
     <section
       id={id}
@@ -111,11 +130,17 @@ export default function Info({
           <span className={styles.shadow2} aria-hidden="true" />
 
           <div className={styles.actions} style={{ "--d": "0ms" }}>
-            <a className={styles.action} href={telHref}>
-              TEL <span className={styles.arrow}>→</span>
-            </a>
+            {telHref ? (
+              <a className={styles.action} href={telHref}>
+                TEL <span className={styles.arrow}>→</span>
+              </a>
+            ) : (
+              <span className={styles.action} aria-hidden="true">
+                TEL
+              </span>
+            )}
             <span className={styles.pipe} aria-hidden="true" />
-            <a className={styles.action} href={mapUrl} target="_blank" rel="noreferrer">
+            <a className={styles.action} href={mapUrl} target="_blank" rel="noreferrer noopener">
               MAP <span className={styles.arrow}>→</span>
             </a>
           </div>
@@ -150,10 +175,10 @@ export default function Info({
                 </svg>
 
                 <div className={`${styles.node} ${styles.nodeAddr}`}>
-                  <p className={styles.label}>住所</p>
-                  <p className={styles.text}>{address.postal}</p>
-                  <p className={styles.text}>{address.line1}</p>
-                  <p className={styles.text}>{address.line2}</p>
+                  <p className={styles.label}>場所</p>
+                  {addrLines.map((t) => (
+                    <p key={t} className={styles.text}>{t}</p>
+                  ))}
                 </div>
 
                 <div className={`${styles.node} ${styles.nodeHours}`}>

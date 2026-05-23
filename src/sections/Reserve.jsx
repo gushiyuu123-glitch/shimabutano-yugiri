@@ -5,9 +5,21 @@ import styles from "./Reserve.module.css";
 export default function Reserve({
   id = "reserve",
   photoSrc = "/images/store1.jpeg",
-  photoAlt = "店舗の写真",
-  phone = "03-1234-5678",
-  hours = "受付時間：11:00–22:00（不定休）",
+  photoAlt = "店内の写真（イメージ）",
+
+  // ✅ 架空のデフォルト（実在っぽい番号は避ける）
+  phone = "098-000-1234",
+
+  // ✅ ここで「デモ」を明示（世界観を壊さない最小）
+  notice = "※架空サイトのデモです。送信内容は保存されません。",
+
+  // ✅ 当日枠の文法（前に決めた運用ルールに近い）
+  sameDay = "当日枠：空き次第（埋まり次第終了）",
+
+  // ✅ 電話受付の“雰囲気”だけ残す（実運用では差し替える）
+  hours = "受付目安：11:00–22:00",
+
+  // 実運用にしたい時だけ渡す（デフォはデモ）
   onSubmit,
 }) {
   const rootRef = useRef(null);
@@ -37,12 +49,13 @@ export default function Reserve({
     return () => io.disconnect();
   }, []);
 
-  const TIMES = useMemo(() => ["11:30", "17:30", "20:00"], []);
+  // ✅ 営業時間に合わせて現実的な開始枠に寄せる（昼/夜）
+  const TIMES = useMemo(() => ["11:30", "17:30", "19:30", "20:30"], []);
   const PEOPLE = useMemo(() => ["1", "2", "3", "4", "5", "6"], []);
   const SEATS = useMemo(
     () => [
       { v: "おまかせ", t: "おまかせ" },
-      { v: "大広間", t: "大広間" },
+      { v: "テーブル", t: "テーブル" },
       { v: "半個室", t: "半個室" },
       { v: "カウンター", t: "カウンター" },
     ],
@@ -60,12 +73,9 @@ export default function Reserve({
   });
 
   const [status, setStatus] = useState("idle"); // idle | sending | done | error
-  const set = (key) => (e) => setForm((p) => ({ ...p, [key]: e.target.value }));
+  const [preview, setPreview] = useState(null); // デモ表示用
 
-  const telHref = useMemo(() => {
-    const digits = (phone || "").replace(/[^\d+]/g, "");
-    return digits ? `tel:${digits}` : undefined;
-  }, [phone]);
+  const set = (key) => (e) => setForm((p) => ({ ...p, [key]: e.target.value }));
 
   const submit = async (e) => {
     e.preventDefault();
@@ -78,8 +88,25 @@ export default function Reserve({
 
     setStatus("sending");
     try {
-      if (onSubmit) await onSubmit(form);
-      else await new Promise((r) => setTimeout(r, 420));
+      // ✅ 実運用：外から渡されたonSubmitがある時だけ呼ぶ
+      if (onSubmit) {
+        await onSubmit(form);
+        setPreview(null);
+        setStatus("done");
+        return;
+      }
+
+      // ✅ デモ：送信した内容を画面に出して終わる（保存しない）
+      await new Promise((r) => setTimeout(r, 360));
+      setPreview({
+        date: form.date,
+        time: form.time,
+        people: form.people,
+        seat: form.seat,
+        name: form.name,
+        tel: form.tel,
+        note: form.note,
+      });
       setStatus("done");
     } catch {
       setStatus("error");
@@ -100,7 +127,7 @@ export default function Reserve({
             <figure className={styles.visual}>
               <img className={styles.visualImg} src={photoSrc} alt={photoAlt} />
               <figcaption className={styles.visualCap}>
-                <p className={styles.visualKicker}>店舗</p>
+                <p className={styles.visualKicker}>店内</p>
                 <p className={styles.visualName}>島豚の湯霧</p>
               </figcaption>
             </figure>
@@ -113,7 +140,7 @@ export default function Reserve({
                 <p className={styles.kicker}>RESERVATION</p>
                 <h2 className={styles.title}>席を取る。それだけ。</h2>
                 <p className={styles.sub}>フォームは2分。急ぎは電話。</p>
-                <p className={styles.meta}>当日枠：空き次第（埋まり次第終了）</p>
+                <p className={styles.meta}>{sameDay}</p>
               </header>
 
               <form className={styles.form} onSubmit={submit}>
@@ -137,13 +164,9 @@ export default function Reserve({
                       onChange={set("time")}
                       required
                     >
-                      <option value="" disabled>
-                        --:--
-                      </option>
+                      <option value="" disabled>--:--</option>
                       {TIMES.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
+                        <option key={t} value={t}>{t}</option>
                       ))}
                     </select>
                   </label>
@@ -157,9 +180,7 @@ export default function Reserve({
                       required
                     >
                       {PEOPLE.map((p) => (
-                        <option key={p} value={p}>
-                          {p} 名様
-                        </option>
+                        <option key={p} value={p}>{p} 名様</option>
                       ))}
                     </select>
                   </label>
@@ -194,14 +215,11 @@ export default function Reserve({
                   </label>
                 </div>
 
-                {/* 任意：席の希望 */}
                 <label className={styles.field}>
                   <span className={styles.label}>席の希望（任意）</span>
                   <select className={styles.select} value={form.seat} onChange={set("seat")}>
                     {SEATS.map((s) => (
-                      <option key={s.v} value={s.v}>
-                        {s.t}
-                      </option>
+                      <option key={s.v} value={s.v}>{s.t}</option>
                     ))}
                   </select>
                 </label>
@@ -223,34 +241,41 @@ export default function Reserve({
                   ) : (
                     <>
                       <span className={styles.ctaLabel}>この内容で送信する</span>
-                      <span className={styles.ctaArrow} aria-hidden="true">
-                        →
-                      </span>
+                      <span className={styles.ctaArrow} aria-hidden="true">→</span>
                     </>
                   )}
                 </button>
 
                 <p className={styles.help}>
                   {status === "done"
-                    ? "送信しました。確認後、折り返して確定します。"
-                    : "送信は仮受付。確認後、折り返して確定します。急ぎは電話へ。"}
+                    ? "送信内容を表示しました（デモ）。"
+                    : "送信はデモ表示です。実際の予約にはつながりません。"}
                 </p>
 
                 {status === "error" && (
                   <p className={styles.error}>必須項目（日時/人数/お名前/電話）を確認してください。</p>
                 )}
+
+                {/* ✅ デモ時だけ：送信内容のプレビュー（世界観を壊さない薄さ） */}
+                {preview && (
+                  <div className={styles.preview} aria-label="送信内容（デモ表示）">
+                    <p className={styles.previewK}>送信内容（デモ）</p>
+                    <p className={styles.previewT}>
+                      {preview.date} / {preview.time} / {preview.people}名 / {preview.seat}
+                      <br />
+                      {preview.name}（{preview.tel}）
+                      {preview.note ? <><br />{preview.note}</> : null}
+                    </p>
+                  </div>
+                )}
               </form>
 
-              <div className={styles.call}>
-                <p className={styles.callLead}>電話でも予約できます</p>
-                {telHref ? (
-                  <a className={styles.callNum} href={telHref}>
-                    {phone}
-                  </a>
-                ) : (
-                  <p className={styles.callNum}>{phone}</p>
-                )}
+              {/* ✅ 電話ブロックは“リンクなし”で残す（架空誤認を防ぐ） */}
+              <div className={styles.call} aria-label="電話でのご案内（参考）">
+                <p className={styles.callLead}>電話でも予約できます（参考）</p>
+                <p className={styles.callNum}>{phone}</p>
                 <p className={styles.hours}>{hours}</p>
+                <p className={styles.notice}>{notice}</p>
               </div>
 
               <div className={styles.rule}>
