@@ -1,0 +1,199 @@
+/* src/sections/SignatureSp.module.css */
+
+.section{
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  /* ✅ SPは少しだけ呼吸を詰めてテンポを上げる（基盤は同じ） */
+  padding-top: clamp(110px, 13vh, 185px);
+  padding-bottom: clamp(120px, 15vh, 205px);
+
+  /* ✅ index.css と同期 */
+  --paper-rgb: var(--c-paper-rgb, 248 244 236);
+  --ink-rgb:   var(--c-ink-rgb, 34 30 26);
+  --gold-rgb:  var(--c-gold-rgb, 201 179 122);
+
+  /* 背景写真の“気配”調整（端末差で汚れない範囲に寄せる） */
+  --imgOpacity: .52;
+  --imgY: 70%;
+  --veilTop: .20;
+  --veilBottom: .48;
+
+  background:
+    radial-gradient(900px 520px at 12% 0%, rgba(var(--c-pork-rgb, 231 201 196), .10), transparent 58%),
+    radial-gradient(900px 520px at 88% 18%, rgba(var(--gold-rgb), .08), transparent 62%),
+    rgb(var(--paper-rgb));
+
+  color: rgb(var(--ink-rgb));
+
+  /* ✅ SPナビのジャンプ事故回避 */
+  scroll-margin-top: calc(var(--nav-h, 72px) + 18px);
+}
+
+/* 背景：鍋は“写真”にしない。気配に落とす */
+.section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+
+  background-image:
+    radial-gradient(1100px 720px at 50% 58%, rgba(0,0,0,.10), transparent 62%),
+    url("/images/dashi-pot.png");
+  background-repeat: no-repeat;
+  background-size: cover, cover;
+  background-position: center var(--imgY), center var(--imgY);
+
+  opacity: var(--imgOpacity);
+
+  /* ✅ blurは“気配”だけ（端末差で気持ち悪くならないライン） */
+  filter: blur(.28px) saturate(1.02) contrast(1.04) brightness(.985);
+  transform: scale(1.03);
+
+  /* 端だけ溶かす（敷いた感を殺す） */
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,.92) 46%,
+    rgba(0,0,0,.56) 72%,
+    transparent 90%
+  );
+  mask-image: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,.92) 46%,
+    rgba(0,0,0,.56) 72%,
+    transparent 90%
+  );
+
+  mix-blend-mode: multiply;
+}
+
+/* 紙膜：背景を整えて“文字が勝つ”下地 */
+.section::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(var(--paper-rgb), var(--veilTop)),
+      rgba(var(--paper-rgb), var(--veilBottom))
+    ),
+    radial-gradient(1200px 720px at 50% 62%, rgba(var(--paper-rgb), 0), rgba(var(--paper-rgb), .16));
+}
+
+/* 中央の器：SP専用は幅を固定して“読みの安定”を取る */
+.wrap{
+  position: relative;
+  z-index: 1;
+  width: min(640px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 5vw, 22px);
+}
+
+.stack{
+  position: relative;
+  width: min(560px, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* 可読性の核心：紙ハロー（“板”に見せない） */
+.stack::before{
+  content:"";
+  position:absolute;
+  inset: -52px -70px;
+  pointer-events:none;
+  z-index: 0;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(var(--paper-rgb), .94) 0%,
+    rgba(var(--paper-rgb), .78) 44%,
+    rgba(var(--paper-rgb), .34) 72%,
+    transparent 90%
+  );
+
+  filter: blur(12px);
+  border-radius: 999px;
+}
+
+.stack > *{
+  position: relative;
+  z-index: 1;
+}
+
+.kicker{
+  font-family: var(--ff-ui, system-ui);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  opacity: .72;
+}
+
+.h2{
+  margin-top: 16px;
+  font-family: var(--ff-display, serif);
+  font-weight: 600;
+
+  /* ✅ SP前提：少しだけ強く（基盤は同じ） */
+  font-size: clamp(28px, 7.4vw, 38px);
+
+  letter-spacing: .01em;
+  line-height: 1.18;
+  color: rgba(var(--ink-rgb), .94);
+}
+
+.body{
+  margin: 18px auto 0;
+  max-width: 52ch;
+}
+
+.p{
+  margin: 0;
+  font-family: var(--ff-ui, system-ui);
+  font-size: 16px;
+  letter-spacing: .02em;
+  line-height: 1.98;
+  color: rgba(var(--ink-rgb), .80);
+}
+.p + .p{ margin-top: 14px; }
+
+.pStrong{
+  margin: 16px 0 0;
+  font-family: var(--ff-ui, system-ui);
+  font-size: 16px;
+  letter-spacing: .02em;
+  line-height: 1.98;
+  color: rgba(var(--ink-rgb), .92);
+}
+
+.closer{
+  margin-top: clamp(38px, 5vh, 68px);
+  font-family: var(--ff-ui, system-ui);
+  font-size: 12px;
+  letter-spacing: .12em;
+  color: rgba(var(--ink-rgb), .62);
+}
+
+/* 小さい端末だけ、ハローの広がりを少し抑える（見切れ防止） */
+@media (max-width: 390px){
+  .stack::before{
+    inset: -46px -52px;
+    filter: blur(11px);
+  }
+}
+
+/* Reduce motion：最低限 */
+@media (prefers-reduced-motion: reduce){
+  .section::before{
+    filter: saturate(1.02) contrast(1.04) brightness(.985);
+  }
+}

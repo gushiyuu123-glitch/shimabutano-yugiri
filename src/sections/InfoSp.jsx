@@ -1,18 +1,18 @@
-// src/sections/Info.jsx
+// src/sections/InfoSp.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
-import styles from "./Info.module.css";
+import styles from "./InfoSp.module.css";
 
-export default function Info({
-  id = "info",
+export default function InfoSp({
+  id = "infoSp",
 
-  // 架空：実在っぽい番号は避けるならここはダミーでOK
-  phone = "098-000-1234",
+  // ✅ 架空：実在誤認を避けるなら空にしてOK（TELリンクも消える）
+  phone = "",
 
-  // ピン住所じゃなく「牧志エリア検索」
+  // ✅ ピン住所じゃなく「牧志エリア検索」
   mapUrl =
     "https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87%20%E7%89%A7%E5%BF%97%20%E5%9B%BD%E9%9A%9B%E9%80%9A%E3%82%8A",
 
-  // 番地は出さない（架空安全）
+  // ✅ 番地は出さない（架空安全）
   address = {
     postal: "",
     line1: "沖縄県那覇市 牧志（国際通り付近）",
@@ -53,7 +53,7 @@ export default function Info({
 
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) {
+        if (e?.isIntersecting) {
           setInView(true);
           io.disconnect();
         }
@@ -97,6 +97,7 @@ export default function Info({
       stage.style.setProperty("--tx1", `${x1.toFixed(3)}%`);
       stage.style.setProperty("--ty1", `${y1.toFixed(3)}%`);
       stage.style.setProperty("--tr1", `${r1.toFixed(3)}deg`);
+
       stage.style.setProperty("--tx2", `${x2.toFixed(3)}%`);
       stage.style.setProperty("--ty2", `${y2.toFixed(3)}%`);
       stage.style.setProperty("--tr2", `${r2.toFixed(3)}deg`);
@@ -113,7 +114,7 @@ export default function Info({
       id={id}
       ref={rootRef}
       className={`${styles.section} ${inView ? styles.in : ""}`}
-      aria-label="店舗情報"
+      aria-label="店舗情報（SP）"
     >
       <div className={styles.wrap}>
         <div className={styles.stage} ref={stageRef}>
@@ -129,13 +130,16 @@ export default function Info({
                 TEL <span className={styles.arrow}>→</span>
               </span>
             )}
+
             <span className={styles.pipe} aria-hidden="true" />
+
             <a className={styles.action} href={mapUrl} target="_blank" rel="noreferrer noopener">
               MAP <span className={styles.arrow}>→</span>
             </a>
           </div>
 
           <div className={styles.layout}>
+            {/* rail（左の縦ブランディング） */}
             <aside className={styles.rail} style={{ "--d": "40ms" }}>
               <div className={styles.railInner}>
                 <p className={styles.railJa}>島豚の湯霧</p>
@@ -144,11 +148,13 @@ export default function Info({
               <span className={styles.railLine} aria-hidden="true" />
             </aside>
 
+            {/* title（右端の縦タイトル） */}
             <header className={styles.titleBlock} style={{ "--d": "80ms" }}>
               <p className={styles.kicker}>INFO</p>
               <h2 className={styles.titleVert}>迷わず、辿り着く。</h2>
             </header>
 
+            {/* diagram（中心：wiresは残す） */}
             <div className={styles.diagramWrap} style={{ "--d": "140ms" }}>
               <div className={styles.diagram}>
                 <svg className={styles.wires} viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
@@ -199,6 +205,7 @@ export default function Info({
               </div>
             </div>
 
+            {/* memo（右寄り補助） */}
             <aside className={styles.memoWrap} style={{ "--d": "200ms" }}>
               <p className={styles.memoSide}>お越しの目印</p>
               <div className={styles.memo}>

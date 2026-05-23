@@ -1,0 +1,438 @@
+/* src/sections/CourseSp.module.css */
+
+.srOnly{
+  position:absolute;
+  width:1px; height:1px;
+  padding:0; margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+
+.section{
+  --paper-rgb: var(--c-paper-rgb, 243 238 230);
+  --ink-rgb:   var(--c-ink-rgb, 25 21 18);
+  --gold-rgb:  var(--c-gold-rgb, 201 179 122);
+
+  background: rgb(var(--paper-rgb));
+  color: rgb(var(--ink-rgb));
+  position: relative;
+  isolation: isolate;
+
+  /* SP最大化：詰めずに“縦の呼吸” */
+  padding-top: clamp(120px, 16vh, 190px);
+  padding-bottom: clamp(140px, 18vh, 220px);
+
+  scroll-margin-top: calc(var(--nav-h, 76px) + 18px);
+  overflow-x: hidden; /* 横スクロール事故を殺す */
+}
+
+.section::before,
+.section::after{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  pointer-events:none;
+  z-index:0;
+}
+.section::before{
+  top:0;
+  height: clamp(56px, 7vh, 120px);
+  transform: translateY(-100%);
+  background: linear-gradient(to bottom, rgba(var(--paper-rgb), 0), rgba(var(--paper-rgb), 1));
+}
+.section::after{
+  bottom:0;
+  height: clamp(56px, 7vh, 120px);
+  transform: translateY(100%);
+  background: linear-gradient(to top, rgba(var(--paper-rgb), 0), rgba(var(--paper-rgb), 1));
+}
+
+.wrap{
+  width: min(640px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 5vw, 22px);
+  position: relative;
+  z-index: 1;
+}
+
+/* head */
+.head{
+  margin-bottom: 18px;
+}
+
+.kicker{
+  font-family: var(--ff-ui);
+  font-weight: var(--fw-ui-med, 500);
+  font-size: 12px;
+  letter-spacing: var(--ls-kicker, .22em);
+  text-transform: uppercase;
+  opacity: .66;
+}
+
+.title{
+  margin-top: 12px;
+  font-family: var(--ff-display);
+  font-weight: var(--fw-display, 600);
+  font-size: clamp(28px, 7.2vw, 40px);
+  letter-spacing: var(--ls-display, -0.015em);
+  line-height: 1.12;
+}
+
+.lead{
+  margin-top: 12px;
+  font-family: var(--ff-ui);
+  font-size: 15px;
+  letter-spacing: .02em;
+  line-height: 1.85;
+  opacity: .78;
+}
+
+/* jump */
+.jump{
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.jumpA{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 12px 12px 11px;
+  border: 1px solid rgba(var(--ink-rgb), .14);
+  background: linear-gradient(180deg, rgba(255,255,255,.54), rgba(255,255,255,.34));
+  box-shadow: 0 16px 40px rgba(0,0,0,.05);
+
+  font-family: var(--ff-ui);
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: rgba(var(--ink-rgb), .82);
+}
+
+.jumpPick{
+  border-color: rgba(var(--gold-rgb), .34);
+  box-shadow: 0 18px 46px rgba(0,0,0,.06), inset 0 0 0 1px rgba(var(--gold-rgb), .12);
+  background: linear-gradient(90deg, rgba(var(--gold-rgb), .08), rgba(255,255,255,.36) 58%);
+}
+
+.jumpSep{
+  opacity: .30;
+  margin: 0 6px;
+}
+
+.jumpP{
+  font-family: var(--ff-display);
+  font-weight: 600;
+  letter-spacing: -.01em;
+  opacity: .92;
+  white-space: nowrap;
+}
+
+/* cards */
+.cards{
+  margin-top: 18px;
+  display: grid;
+  gap: 18px;
+}
+
+.card{
+  border: 1px solid rgba(var(--ink-rgb), .14);
+  background: rgba(255,255,255,.28);
+  box-shadow: 0 22px 60px rgba(0,0,0,.06);
+  overflow: hidden; /* 横事故を殺す */
+}
+
+.cardPick{
+  border-color: rgba(var(--gold-rgb), .34);
+  box-shadow: 0 24px 64px rgba(0,0,0,.07), inset 0 0 0 1px rgba(var(--gold-rgb), .12);
+}
+
+/* media */
+.media{
+  margin: 0;
+  position: relative;
+  height: clamp(220px, 62vw, 340px);
+  background: #000;
+}
+
+.media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+  transform: scale(1.02);
+  filter: saturate(.98) contrast(1.02);
+}
+
+.mediaVeil{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.00) 0%, rgba(0,0,0,.10) 54%, rgba(0,0,0,.26) 100%),
+    linear-gradient(90deg, rgba(0,0,0,.14), rgba(0,0,0,0) 48%, rgba(0,0,0,.12));
+  opacity: .62;
+  pointer-events:none;
+}
+
+.mediaGrain{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(900px 420px at 18% 10%, rgba(255,255,255,.08), transparent 55%),
+    radial-gradient(900px 420px at 88% 82%, rgba(255,255,255,.06), transparent 58%);
+  mix-blend-mode: overlay;
+  opacity: .35;
+  pointer-events:none;
+}
+
+/* body */
+.body{
+  padding: 14px 14px 16px;
+  background:
+    radial-gradient(420px 220px at 12% 0%, rgba(0,0,0,.04), transparent 56%),
+    linear-gradient(180deg, rgba(255,255,255,.74), rgba(255,255,255,.56));
+}
+
+.topRow{
+  display:flex;
+  align-items:flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nameLine{
+  display:flex;
+  align-items:flex-end;
+  gap: 10px;
+  min-width: 0;
+}
+
+.nameWrap{
+  display:inline-flex;
+  align-items:flex-end;
+  height: 44px;
+  line-height: 1;
+  min-width: 0;
+}
+
+.nameSvg{
+  display:block;
+  height: 44px;
+  width: auto;
+  max-width: 100%;
+  opacity: .98;
+  filter:
+    brightness(0) saturate(100%)
+    drop-shadow(0 0 0.8px rgba(0,0,0,.50))
+    drop-shadow(0 12px 18px rgba(0,0,0,.08));
+  mix-blend-mode: multiply;
+}
+
+.svg_kaze{ height: 42px; }
+.svg_teiban{ height: 44px; }
+.svg_yugiri{ height: 44px; }
+
+.kana{
+  font-family: var(--ff-ui);
+  font-size: 11px;
+  letter-spacing: .14em;
+  opacity: .62;
+  transform: translateY(-1px);
+  white-space: nowrap;
+}
+
+.tag{
+  margin-left: 6px;
+  padding: 3px 8px 4px;
+  font-family: var(--ff-ui);
+  font-size: 10px;
+  letter-spacing: .14em;
+  line-height: 1;
+  opacity: .78;
+  border: 1px solid rgba(var(--gold-rgb), .30);
+  background: rgba(var(--gold-rgb), .08);
+  white-space: nowrap;
+}
+
+.price{
+  font-family: var(--ff-display); /* 数字も世界観側へ寄せる */
+  font-weight: 600;
+  letter-spacing: -.01em;
+  font-variant-numeric: lining-nums;
+  font-size: 24px;
+  opacity: .92;
+  white-space: nowrap;
+}
+
+.copy{
+  margin: 10px 0 0;
+  font-family: var(--ff-ui);
+  font-size: 13px;
+  letter-spacing: .02em;
+  opacity: .86;
+}
+
+.lines{
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.line{
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: .02em;
+  opacity: .78;
+}
+
+.metaRow{
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(var(--ink-rgb), .12);
+  display:flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.metaK{
+  font-family: var(--ff-ui);
+  font-size: 11px;
+  letter-spacing: .12em;
+  opacity: .62;
+  white-space: nowrap;
+}
+
+.metaV{
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: .06em;
+  opacity: .82;
+}
+
+/* add-ons */
+.addons{
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(var(--ink-rgb), .14);
+}
+
+.addTop{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+}
+
+.addKicker{
+  font-family: var(--ff-ui);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  opacity: .58;
+}
+
+.addRule{
+  height: 1px;
+  flex: 1;
+  background: rgba(var(--gold-rgb), .32);
+}
+
+.addLead{
+  margin: 10px 0 12px;
+  font-family: var(--ff-ui);
+  font-size: 13px;
+  letter-spacing: .02em;
+  opacity: .84;
+}
+
+.addList{
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.addRow{
+  display: grid;
+  grid-template-columns: 66px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(var(--ink-rgb), .10);
+}
+.addRow:last-child{
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.addKey{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 11px;
+  letter-spacing: .12em;
+  opacity: .62;
+  white-space: nowrap;
+}
+
+.addVal{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: .02em;
+  opacity: .80;
+}
+
+.note{
+  margin-top: 12px;
+  font-family: var(--ff-ui);
+  font-size: 11px;
+  letter-spacing: .12em;
+  line-height: 1.9;
+  opacity: .58;
+}
+
+/* reduced-motion safety */
+@media (prefers-reduced-motion: reduce){
+  .nameSvg{
+    mix-blend-mode: normal;
+    filter: brightness(0) saturate(100%);
+  }
+}
+/* まず全行の白面を少しだけ強くする（溶け防止） */
+.jumpA{
+  position: relative;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,.62),
+    rgba(255,255,255,.40)
+  );
+  box-shadow: 0 14px 34px rgba(0,0,0,.06);
+}
+
+/* 定番：白面は残す＋金は“縁と薄い帯”だけ */
+.jumpPick{
+  background: linear-gradient(180deg,
+    rgba(255,255,255,.74),
+    rgba(255,255,255,.46)
+  );
+  border-color: rgba(var(--gold-rgb), .42);
+  box-shadow:
+    0 18px 42px rgba(0,0,0,.07),
+    inset 0 0 0 1px rgba(var(--gold-rgb), .14);
+}
+
+/* “おすすめ”を面で作らず、左の極細帯で作る（上品） */
+.jumpPick::before{
+  content:"";
+  position:absolute;
+  left: 10px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: rgba(var(--gold-rgb), .62);
+  opacity: .9;
+  pointer-events:none;
+}

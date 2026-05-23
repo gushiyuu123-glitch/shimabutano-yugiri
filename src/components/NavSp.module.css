@@ -1,0 +1,374 @@
+/* src/components/NavSp.module.css */
+
+.srOnly{
+  position:absolute;
+  width:1px; height:1px;
+  padding:0; margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+
+/* ===== Fixed Nav ===== */
+.nav{
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--nav-h, 72px);
+  z-index: 80;
+}
+
+.inner{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0 clamp(14px, 4vw, 18px);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(var(--c-paper-rgb), .88),
+    rgba(var(--c-paper-rgb), .66)
+  );
+
+  backdrop-filter: blur(10px) saturate(112%);
+  -webkit-backdrop-filter: blur(10px) saturate(112%);
+
+  border-bottom: 1px solid rgba(var(--c-gold-rgb), .16);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))){
+  .inner{ background: rgba(var(--c-paper-rgb), .94); }
+}
+
+/* Entrance */
+.isOff{
+  opacity: 0;
+  transform: translate3d(0,-10px,0) scale(0.995);
+  transition:
+    opacity var(--dur-1, 680ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform var(--dur-1, 680ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  pointer-events: none;
+}
+.isOn{
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1);
+  transition:
+    opacity var(--dur-1, 680ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform var(--dur-1, 680ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  pointer-events: auto;
+}
+
+/* ===== Brand (logo keep) ===== */
+.brand{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(var(--c-ink-rgb), .92);
+  text-decoration: none;
+}
+
+.brandMark{
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 34px;
+}
+
+.logoGlyph{
+  display: block;
+  height: auto;
+  width: var(--w, 20px);
+  opacity: var(--o, 1);
+  transform: translateY(var(--y, 0px)) scale(var(--s, 1));
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.10));
+}
+
+.l1{ --w: 21px; --y: 0px; }
+.l2{ --w: 21px; --y: 1px; }
+.l3{ --w: 11px; --y: 2px; --s: .98; }
+.l4{ --w: 21px; --y: 0px; }
+.l5{ --w: 20px; --y: 1px; }
+.lNo{ opacity: .62; }
+
+/* ===== Menu Button ===== */
+.menuBtn{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 10px;
+  background: transparent;
+  border: 1px solid rgba(var(--c-ink-rgb), .14);
+
+  /* 角丸禁止：紙の部品 */
+  border-radius: 0;
+
+  color: rgba(var(--c-ink-rgb), .88);
+  cursor: pointer;
+
+  box-shadow: 0 18px 44px rgba(0,0,0,.04);
+}
+
+.menuTop{
+  display: grid;
+  gap: 2px;
+  text-align: right;
+  line-height: 1.1;
+}
+
+.menuLabel{
+  font-size: 11px;
+  letter-spacing: .22em;
+  opacity: .74;
+}
+
+.menuNow{
+  font-size: 10px;
+  letter-spacing: .12em;
+  opacity: .52;
+  white-space: nowrap;
+}
+
+.menuIcon{
+  width: 18px;
+  height: 14px;
+  display: grid;
+  align-content: space-between;
+}
+
+.menuIcon i{
+  display:block;
+  height: 1px;
+  background: rgba(var(--c-ink-rgb), .62);
+}
+.i2{ opacity: .46; }
+.i3{
+  opacity: .34;
+  box-shadow: inset 0 0 0 1px rgba(var(--c-gold-rgb), .12);
+}
+
+/* ===== Sheet ===== */
+.sheetWrap{
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.sheetOn{
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.backdrop{
+  position:absolute;
+  inset:0;
+  background: rgba(20,18,16,.22);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.sheet{
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: calc(var(--nav-h, 72px) + 10px);
+
+  background: linear-gradient(
+    180deg,
+    rgba(var(--c-paper-rgb), .94),
+    rgba(var(--c-paper-rgb), .86)
+  );
+
+  border: 1px solid rgba(var(--c-ink-rgb), .14);
+  border-radius: 0;
+  box-shadow: 0 36px 90px rgba(0,0,0,.16);
+
+  max-height: calc(100svh - (var(--nav-h, 72px) + 24px));
+  overflow: auto;
+}
+
+.sheetHead{
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid rgba(var(--c-ink-rgb), .10);
+}
+
+.sheetK{
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: .22em;
+  opacity: .62;
+}
+
+.sheetMeta{
+  margin: 6px 0 0;
+  font-size: 12px;
+  letter-spacing: .08em;
+  opacity: .78;
+}
+
+.sheetNav{
+  padding: 8px 0;
+}
+
+.sheetList{
+  list-style:none;
+  margin: 0;
+  padding: 0;
+}
+
+.sheetItem{
+  position: relative;
+  padding: 0 14px;
+}
+
+.vLine{
+  position:absolute;
+  left: 14px;
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background: rgba(var(--c-gold-rgb), .34);
+  opacity: .9;
+}
+
+.sheetLink{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 10px;
+
+  padding: 14px 0 14px 12px; /* vLineぶん */
+  border-bottom: 1px solid rgba(var(--c-ink-rgb), .10);
+
+  color: rgba(var(--c-ink-rgb), .88);
+  text-decoration: none;
+}
+
+.sheetItem:last-child .sheetLink{
+  border-bottom: none;
+}
+
+.linkJa{
+  font-size: 15px;
+  letter-spacing: .06em;
+}
+
+.linkEn{
+  font-size: 10px;
+  letter-spacing: .22em;
+  opacity: .54;
+  white-space: nowrap;
+}
+
+.sheetActive{
+  color: rgba(var(--c-ink-rgb), .95);
+}
+.sheetActive .linkEn{
+  opacity: .68;
+}
+.sheetActive .vLine{
+  background: rgba(var(--c-gold-rgb), .64);
+}
+
+.sheetFoot{
+  padding: 10px 14px 14px;
+  border-top: 1px solid rgba(var(--c-ink-rgb), .10);
+  display:flex;
+  align-items:center;
+  gap: 12px;
+}
+
+.closeBtn{
+  padding: 10px 12px;
+  background: transparent;
+  border: 1px solid rgba(var(--c-ink-rgb), .14);
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: .12em;
+  color: rgba(var(--c-ink-rgb), .82);
+}
+
+.footRule{
+  height: 1px;
+  flex: 1;
+  background: rgba(var(--c-ink-rgb), .10);
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .isOff, .isOn{ transition:none; transform:none; }
+  .sheetWrap{ transition:none; }
+}
+/* ===== Sheet ===== */
+.sheetWrap{
+  position: fixed;
+  inset: 0;
+  z-index: 220;              /* 念のため上げる */
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;         /* ← これで半端な残像を消す */
+  transition: opacity 220ms ease, visibility 0ms linear 220ms;
+  isolation: isolate;         /* 合成の事故を減らす */
+}
+
+.sheetOn{
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 220ms ease;
+}
+
+.backdrop{
+  position:absolute;
+  inset:0;
+
+  /* ✅ “暗幕”にする：下の本文を完全に殺す */
+  background: rgba(20,18,16,.64);
+
+  /* ✅ ゴーストの主因になるので切る */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.sheet{
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: calc(var(--nav-h, 72px) + 10px);
+
+  /* ✅ ほぼ不透明の紙（透け禁止） */
+  background: rgb(var(--c-paper-rgb));
+
+  border: 1px solid rgba(var(--c-ink-rgb), .14);
+  border-radius: 0;
+  box-shadow: 0 36px 90px rgba(0,0,0,.18);
+
+  max-height: calc(100svh - (var(--nav-h, 72px) + 24px));
+  overflow: auto;
+
+  /* ✅ ここもゴーストを出しやすいので切る */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* 紙の気配（透けじゃなく“質感”で） */
+.sheet::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.06;
+  background:
+    radial-gradient(900px 420px at 18% 10%, rgba(255,255,255,.9), transparent 58%),
+    radial-gradient(900px 420px at 88% 86%, rgba(0,0,0,.35), transparent 62%);
+  mix-blend-mode: multiply;
+}

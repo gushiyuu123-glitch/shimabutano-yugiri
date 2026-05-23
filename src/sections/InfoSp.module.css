@@ -1,26 +1,31 @@
+/* src/sections/InfoSp.module.css */
+
 .section{
   position: relative;
-  padding-top: clamp(88px, 10vh, 140px);
-  padding-bottom: clamp(96px, 10vh, 150px);
+  padding-top: clamp(92px, 10vh, 150px);
+  padding-bottom: clamp(96px, 10vh, 160px);
   color: rgb(20 20 20);
   background:
     radial-gradient(1200px 520px at 16% 8%, rgba(0,0,0,0.03), transparent 62%),
     radial-gradient(900px 520px at 88% 18%, rgba(0,0,0,0.025), transparent 60%),
     linear-gradient(180deg, rgb(248 246 242), rgb(246 244 239));
   overflow: hidden;
+
+  /* ✅ 横スク事故を最初に殺す */
+  overflow-x: clip;
 }
 
 .wrap{
-  width: min(1680px, 100%);
+  width: min(720px, 100%);
   margin: 0 auto;
-  padding: 0 clamp(16px, 3vw, 84px);
+  padding: 0 clamp(16px, 5vw, 22px);
 }
 
 .stage{
   position: relative;
   isolation: isolate;
 
-  /* ここを固定しすぎない。縦に伸びすぎる原因を消す */
+  /* ✅ ここを固定しすぎない（縦に伸びすぎる原因を消す） */
   min-height: auto;
 
   --tx1: -1.2%;
@@ -31,6 +36,7 @@
   --tr2: 0deg;
 }
 
+/* subtle ink haze */
 .stage::before{
   content:"";
   position:absolute;
@@ -49,6 +55,7 @@
   z-index: 0;
 }
 
+/* 木陰 layer1 */
 .stage::after{
   content:"";
   position:absolute;
@@ -66,6 +73,7 @@
   will-change: transform;
 }
 
+/* 木陰 layer2 */
 .shadow2{
   position: absolute;
   inset: -4%;
@@ -110,7 +118,6 @@
     transform:none;
     animation:none !important;
   }
-
   .stage::after,
   .shadow2{
     transform: none;
@@ -151,17 +158,16 @@
 }
 
 /* =========================
-   layout
-   縦文字を右端に固定
+   layout（縦区切り固定）
 ========================= */
 .layout{
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr) 240px 140px;
+  grid-template-columns: 56px minmax(0, 1fr) 210px 120px;
   grid-template-areas:
     "rail diagram memo title";
   align-items: start;
-  column-gap: clamp(18px, 2.4vw, 34px);
-  padding-top: clamp(30px, 5vh, 60px);
+  column-gap: clamp(16px, 2.4vw, 28px);
+  padding-top: clamp(30px, 5vh, 56px);
   position: relative;
   z-index: 2;
 }
@@ -171,7 +177,7 @@
   grid-area: rail;
   position: relative;
   align-self: stretch;
-  min-height: 620px;
+  min-height: 560px; /* ✅ “デカすぎ”防止：必要最低限 */
 }
 
 .railInner{
@@ -230,13 +236,13 @@
   margin: 0;
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  font-size: clamp(42px, 4vw, 64px);
+  font-size: clamp(40px, 4vw, 60px);
   letter-spacing: 0.08em;
   line-height: 1.04;
   font-weight: 600;
 }
 
-/* diagram - 中央の主役 */
+/* diagram - 主役 */
 .diagramWrap{
   grid-area: diagram;
   padding-top: 82px;
@@ -276,8 +282,11 @@
   opacity: 0.86;
 }
 
+/* ✅ 数字タイポはInterに寄せない（世界観統一） */
 .textMono{
   margin: 0;
+  font-family: var(--ff-ui, "Zen Kaku Gothic New", system-ui);
+  font-variant-numeric: tabular-nums;
   font-size: 12px;
   line-height: 1.9;
   letter-spacing: 0.06em;
@@ -312,12 +321,10 @@
   opacity: 0.72;
 }
 
-.memo{
-  position: relative;
-}
+.memo{ position: relative; }
 
 .memoPaper{
-  width: min(220px, 100%);
+  width: min(210px, 100%);
   padding: 18px 18px 14px;
   border: 1px solid rgba(20,20,20,0.12);
   background:
@@ -336,10 +343,7 @@
   border-bottom: 1px solid rgba(20,20,20,0.10);
   padding-bottom: 10px;
 }
-
-.memoLine:last-of-type{
-  margin-bottom: 0;
-}
+.memoLine:last-of-type{ margin-bottom: 0; }
 
 .stamp{
   position:absolute;
@@ -385,21 +389,6 @@
 }
 
 /* responsive */
-@media (max-width: 1180px){
-  .layout{
-    grid-template-columns: 56px minmax(0, 1fr) 200px 110px;
-    column-gap: 20px;
-  }
-
-  .titleVert{
-    font-size: clamp(34px, 3.4vw, 52px);
-  }
-
-  .memoPaper{
-    width: 190px;
-  }
-}
-
 @media (max-width: 980px){
   .layout{
     grid-template-columns: 1fr;
@@ -426,15 +415,8 @@
     letter-spacing: 0.06em;
   }
 
-  .diagramWrap{
-    padding-top: 0;
-  }
-
-  .diagram{
-    height: auto;
-    padding-top: 8px;
-  }
-
+  .diagramWrap{ padding-top: 0; }
+  .diagram{ height: auto; padding-top: 8px; }
   .wires{ display:none; }
 
   .node{

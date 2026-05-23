@@ -547,3 +547,32 @@
     padding-bottom: clamp(150px, 18vh, 240px);
   }
 }
+:root{
+  /* ここだけ差し替え */
+  --ff-num: "Zen Old Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --fw-num: 600;
+  --ls-num: .01em;
+}
+
+/* 数字の共通（価格・メタなど） */
+.price,.metaNum{
+  font-family: var(--ff-num);
+  font-weight: var(--fw-num);
+  letter-spacing: var(--ls-num);
+
+  /* 対応フォントなら揃う／無ければ無視されるだけ */
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+}
+.tPrice{
+  font-family: var(--ff-display); /* ←数字も見出し側へ */
+  font-weight: 600;
+  letter-spacing: -0.01em;        /* ←Mincho数字は詰めた方が品が出る */
+  font-variant-numeric: lining-nums;
+}
+.no{
+  font-family: var(--ff-display);
+  font-weight: 600;
+  letter-spacing: .10em; /* ←広げすぎ禁止 */
+  opacity: .58;          /* ←“番号は主役じゃない”を維持 */
+}

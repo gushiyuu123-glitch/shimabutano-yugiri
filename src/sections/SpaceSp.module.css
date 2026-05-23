@@ -1,0 +1,199 @@
+/* src/sections/SpaceSp.module.css */
+
+.section{
+  --paper-rgb: var(--c-paper-rgb, 243 238 230);
+  --ink-rgb:   var(--c-ink-rgb, 25 21 18);
+  --gold-rgb:  var(--c-gold-rgb, 201 179 122);
+
+  background: rgb(var(--paper-rgb));
+  color: rgb(var(--ink-rgb));
+
+  position: relative;
+  isolation: isolate;
+
+  padding-top: clamp(132px, 16vh, 200px);
+  padding-bottom: clamp(150px, 18vh, 220px);
+
+  scroll-margin-top: calc(var(--nav-h, 72px) + 18px);
+
+  /* ✅ 横スク事故を殺す（svg/影のはみ出し対策） */
+  overflow-x: clip;
+}
+
+.section::before{
+  /* 紙の粒：うっすら */
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index: 0;
+  opacity:.07;
+  mix-blend-mode:multiply;
+
+  background:
+    radial-gradient(1px 1px at 18% 22%, rgba(0,0,0,.55), transparent 58%),
+    radial-gradient(1px 1px at 62% 34%, rgba(0,0,0,.45), transparent 58%),
+    radial-gradient(1px 1px at 78% 66%, rgba(0,0,0,.35), transparent 58%),
+    radial-gradient(1px 1px at 32% 76%, rgba(0,0,0,.35), transparent 58%);
+
+  background-size: 280px 280px, 320px 320px, 360px 360px, 420px 420px;
+  background-position: 0 0, 92px 54px, 138px 162px, 224px 18px;
+}
+
+.section::after{
+  /* 紙の陰影（面） */
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index: 1;
+  opacity: .18;
+  mix-blend-mode: multiply;
+
+  background:
+    radial-gradient(900px 520px at 18% 14%, rgba(255,255,255,.60), transparent 60%),
+    radial-gradient(900px 580px at 80% 86%, rgba(0,0,0,.06), transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.03));
+}
+
+.wrap{
+  width: min(640px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 5vw, 22px);
+  position: relative;
+  z-index: 2;
+}
+
+.head{
+  text-align: center;
+  margin-bottom: clamp(18px, 3vh, 30px);
+}
+
+.title{
+  margin: 0;
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: clamp(34px, 9.2vw, 52px);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+.lead{
+  margin: 14px 0 0;
+  font-family: var(--ff-ui);
+  font-size: 14px;
+  letter-spacing: .06em;
+  line-height: 1.95;
+  opacity: .78;
+}
+
+/* 3枚縦 */
+.list{
+  display: grid;
+  gap: clamp(26px, 4.8vh, 44px);
+}
+
+.item{
+  display: grid;
+  gap: 12px;
+}
+
+/* blob image */
+.blob{
+  margin: 0;
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+
+  /* ✅ 影は上品に。強すぎると“UI”になる */
+  filter:
+    drop-shadow(0 18px 34px rgba(0,0,0,.16))
+    drop-shadow(0 6px 14px rgba(0,0,0,.07));
+}
+
+.blobSvg{
+  width: 100%;
+  height: auto;
+  display: block;
+  max-width: 100%;
+  transform: translateZ(0);
+}
+
+.blobVeil{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(1100px 700px at 40% 26%, rgba(var(--paper-rgb), .10), transparent 56%),
+    linear-gradient(180deg, rgba(var(--paper-rgb), .10), rgba(var(--paper-rgb), .18));
+  mix-blend-mode: multiply;
+  opacity: .46;
+}
+
+.blobGrain{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background:
+    radial-gradient(900px 420px at 18% 10%, rgba(255,255,255,.10), transparent 55%),
+    radial-gradient(900px 420px at 88% 82%, rgba(0,0,0,.10), transparent 58%);
+  mix-blend-mode: overlay;
+}
+
+/* note */
+.note{
+  padding-left: 2px;
+}
+
+.noteTop{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dash{
+  width: 22px;
+  height: 1px;
+  background: rgba(var(--gold-rgb), .72);
+}
+
+.noteTitle{
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: .02em;
+}
+
+.noteBody{
+  margin: 10px 0 0;
+  font-family: var(--ff-ui);
+  font-size: 14px;
+  line-height: 1.9;
+  letter-spacing: .06em;
+  opacity: .86;
+}
+
+.noteSub{
+  margin: 10px 0 0;
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: .10em;
+  line-height: 1.85;
+  opacity: .62;
+}
+
+.foot{
+  margin: clamp(28px, 6vh, 44px) 0 0;
+  text-align: center;
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: .10em;
+  line-height: 1.8;
+  opacity: .62;
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .blobSvg{ transform: none; }
+}

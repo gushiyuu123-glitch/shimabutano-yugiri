@@ -1,0 +1,306 @@
+/* src/sections/FlowSp.module.css */
+
+.section{
+  --paper-rgb: var(--c-paper-rgb, 243 238 230);
+  --ink-rgb:   var(--c-ink-rgb, 25 21 18);
+  --gold-rgb:  var(--c-gold-rgb, 201 179 122);
+
+  position: relative;
+  isolation: isolate;
+
+  padding-top: clamp(140px, 16vh, 240px);
+  padding-bottom: clamp(160px, 18vh, 280px);
+
+  color: rgb(var(--ink-rgb));
+  background: rgb(var(--paper-rgb));
+
+  scroll-margin-top: calc(var(--nav-h, 72px) + 18px);
+
+  --dur: var(--dur-1, 680ms);
+  --stagger: 120ms;
+  --ease: var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+
+  /* ✅ 横スク事故を殺す */
+  overflow-x: clip;
+}
+
+.section::before,
+.section::after{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  pointer-events:none;
+  z-index: 0;
+}
+.section::before{
+  top:0;
+  height: clamp(56px, 7vh, 120px);
+  transform: translateY(-100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--paper-rgb), 0),
+    rgba(var(--paper-rgb), 1)
+  );
+}
+.section::after{
+  bottom:0;
+  height: clamp(56px, 7vh, 120px);
+  transform: translateY(100%);
+  background: linear-gradient(
+    to top,
+    rgba(var(--paper-rgb), 0),
+    rgba(var(--paper-rgb), 1)
+  );
+}
+
+.section > *{
+  position: relative;
+  z-index: 1;
+}
+
+/* ✅ 横幅は締める（SPでも縦に伸びすぎない） */
+.wrap{
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 5vw, 22px);
+}
+
+/* frame（中央カードUI） */
+.frame{
+  position: relative;
+  overflow: hidden;      /* テクスチャを枠内に封じる */
+  isolation: isolate;
+
+  border: 1px solid rgba(var(--gold-rgb), .20);
+  background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.10));
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.08),
+    0 10px 30px rgba(0,0,0,.05);
+}
+
+/* ✅ flow-right.jpeg を “紙面テクスチャ” として敷く（center固定） */
+.frame::before{
+  content:"";
+  position:absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events:none;
+
+  /* ✅ 拡張子とパス統一（/public/images/flow-right.jpeg に置く） */
+  background: url("/images/flow-right.jpeg") 50% 50% / cover no-repeat;
+
+  /* 写真ではなくテクスチャ */
+  opacity: .12;
+  filter: saturate(.92) contrast(1.06) brightness(1.02) blur(.22px);
+  mix-blend-mode: multiply;
+
+  /* ✅ 端の“敷いた感”を消す（強すぎると横スクの元になるので浅く） */
+  -webkit-mask-image: radial-gradient(
+    ellipse at 50% 46%,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,.86) 56%,
+    transparent 82%
+  );
+  mask-image: radial-gradient(
+    ellipse at 50% 46%,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,.86) 56%,
+    transparent 82%
+  );
+}
+
+/* 読みやすさを守る紙膜（テクスチャの上） */
+.frame::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index: 1;
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(var(--paper-rgb), .74),
+      rgba(var(--paper-rgb), .60)
+    ),
+    radial-gradient(1100px 700px at 50% 52%, rgba(255,255,255,.08), transparent 62%);
+  opacity: .72;
+}
+
+/* frame内の中身は全部前面へ */
+.frame > *{
+  position: relative;
+  z-index: 2;
+}
+
+/* reveal */
+.head, .item, .note{
+  opacity: 0;
+  transform: translateY(18px) scale(0.995);
+}
+.in .head, .in .item, .in .note{
+  animation: inUp var(--dur) var(--ease) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes inUp{
+  to{ opacity:1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce){
+  .head, .item, .note{ opacity:1; transform:none; animation:none !important; }
+}
+
+/* Header */
+.head{
+  padding: clamp(18px, 4.8vw, 26px);
+  border-bottom: 1px solid rgba(var(--gold-rgb), .18);
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.kicker{
+  margin: 0 0 6px;
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: var(--ls-kicker, .22em);
+  text-transform: uppercase;
+  opacity: .70;
+}
+
+.title{
+  margin: 0;
+  font-family: var(--ff-display);
+  font-size: clamp(28px, 7.2vw, 40px);
+  font-weight: var(--fw-display, 600);
+  line-height: 1.12;
+  letter-spacing: var(--ls-display, -0.015em);
+}
+
+.sub{
+  margin: 8px 0 0;
+  font-family: var(--ff-ui);
+  font-size: 13px;
+  letter-spacing: .08em;
+  opacity: .68;
+}
+
+.meta{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: .08em;
+  opacity: .72;
+  white-space: normal;
+}
+
+/* List */
+.list{ display: grid; }
+
+.item{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 18px clamp(16px, 4.6vw, 22px);
+  border-top: 1px solid rgba(var(--gold-rgb), .14);
+}
+.item:first-child{ border-top: none; }
+
+.left{
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+/* ✅ 数字のタイポを世界観寄せ（Interを使わない） */
+.no{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: .16em;
+  opacity: .58;
+  font-variant-numeric: tabular-nums;
+}
+
+.name{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 14px;
+  letter-spacing: .10em;
+  opacity: .90;
+}
+
+.right{ min-width: 0; }
+
+.lead{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 15px;
+  line-height: 1.95;
+  opacity: .88;
+}
+
+.dl{
+  margin: 12px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+.dlRow{
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(var(--gold-rgb), .12);
+}
+
+.dt{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: .10em;
+  opacity: .62;
+  white-space: nowrap;
+}
+
+.dd{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 13px;
+  line-height: 1.72;
+  opacity: .84;
+}
+
+/* 03だけ：温度差は密度だけで */
+.hot .lead{ opacity: .92; }
+.hot .name{ opacity: .96; }
+
+/* note */
+.note{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 16px clamp(16px, 4.6vw, 22px) 18px;
+  border-top: 1px solid rgba(var(--gold-rgb), .18);
+}
+.noteK{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  letter-spacing: .12em;
+  opacity: .66;
+}
+.noteT{
+  margin: 0;
+  font-family: var(--ff-ui);
+  font-size: 12px;
+  line-height: 1.78;
+  opacity: .72;
+}
+
+/* SPはテクスチャをさらに薄く（端末差で汚れない） */
+@media (max-width: 420px){
+  .frame::before{ opacity: .08; }
+  .frame::after{ opacity: .78; }
+  .dlRow{ grid-template-columns: 64px 1fr; }
+}
