@@ -99,20 +99,20 @@ export default function HeroSp({ id = "heroSp" }) {
       bg.style.setProperty("--bgC", "0.95");
       bg.style.setProperty("--bgS", "0.92");
 
-// yamasoi 初期化：CSS transform に頼らず GSAPで中央固定
-if (yamasoi) {
-  gsap.set(yamasoi, {
-    autoAlpha: 0,
-    y: 10,
-    rotate: -6,
-    scale: 0.985,
-    left: "50%",
-    xPercent: -50,     // ✅ これが中央固定の本体
-    transformOrigin: "50% 50%",
-    force3D: true,
-    willChange: "opacity, transform",
-  });
-}
+      // yamasoi 初期化：CSS transform に頼らず GSAPで中央固定
+      if (yamasoi) {
+        gsap.set(yamasoi, {
+          autoAlpha: 0,
+          y: 10,
+          rotate: -6,
+          scale: 0.985,
+          left: "50%",
+          xPercent: -50, // ✅ 中央固定
+          transformOrigin: "50% 50%",
+          force3D: true,
+          willChange: "opacity, transform",
+        });
+      }
 
       const byKey = new Map();
       glyphs.forEach((el) => byKey.set(el.dataset.key, el));
@@ -178,7 +178,9 @@ if (yamasoi) {
         <div ref={bgRef} className={styles.bg} />
       </div>
 
-      <h1 className={styles.srOnly}>島豚の湯霧</h1>
+      <h1 className={styles.srOnly}>
+        OKINAWA / SHABU-SHABU　島豚の湯霧　出汁で、決まる。　沖縄豚 しゃぶしゃぶ　目安 90分
+      </h1>
 
       <div className={styles.calli} role="img" aria-label="島豚の湯霧">
         {CALLI.map((g) => (
@@ -213,17 +215,16 @@ if (yamasoi) {
           OKINAWA / SHABU-SHABU
         </div>
 
-        <p className={`${styles.sub} ${styles.reveal}`} style={{ "--d": "220ms" }}>
-          島豚を、湯の中で。
-          <span className={styles.dot} aria-hidden="true">・</span>
-          一口目で、納得。
-        </p>
+<p className={`${styles.sub} ${styles.reveal}`} style={{ "--d": "220ms" }}>
+  出汁は一種。最初の一口は、そのまま。
+</p>
 
         <div className={`${styles.metaRow} ${styles.reveal}`} style={{ "--d": "320ms" }}>
-          <span className={styles.metaLabel}>Course</span>
-          <span className={styles.metaNum}>¥4,200 — ¥7,800</span>
-          <span className={styles.metaDivider} aria-hidden="true">／</span>
-          <span className={styles.metaVal}>目安 90分前後</span>
+          <span className={styles.metaLabel}>沖縄豚 しゃぶしゃぶ</span>
+          <span className={styles.metaDivider} aria-hidden="true">
+            ／
+          </span>
+          <span className={styles.metaVal}>目安 90分</span>
         </div>
       </div>
     </section>

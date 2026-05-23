@@ -7,38 +7,38 @@ const FLOW = [
     key: "reserve",
     no: "01",
     title: "予約",
-    lead: "人数と時間。席の希望があれば一言。",
+    lead: "人数と開始時間。席の希望は備考に。",
     meta: "1分",
-    point: "アレルギー・苦手は備考欄に。",
-    note: "当日枠は空き次第。",
+    point: "アレルギー・苦手も備考に。",
+    note: "当日も空きがあれば案内。",
   },
   {
     key: "arrival",
     no: "02",
     title: "来店",
-    lead: "お名前確認 → 席へ。鍋の準備を整えます。",
+    lead: "お名前確認 → 席へ。鍋の準備をします。",
     meta: "5〜10分",
-    point: "遅れる時は、ご連絡だけ。",
-    note: "お車は近隣Pをご利用ください。",
+    point: "遅れる時は、連絡だけでOK。",
+    note: "お車は近隣コインPへ。",
   },
   {
     key: "nabe",
     no: "03",
     title: "鍋",
-    lead: "湯霧が立つ。あとは、食べるだけ。",
+    lead: "湯霧が立ったら、しゃぶしゃぶ。",
     meta: "約70分",
     point: "最初は、何もつけずに。",
-    note: "追加は、必要な分だけ。",
+    note: "足りない分だけ、あとから追加。",
     hot: true,
   },
   {
     key: "exit",
     no: "04",
     title: "退店",
-    lead: "会計して、ゆっくり帰る。",
+    lead: "会計して、帰るだけ。",
     meta: "5分",
-    point: "忘れ物だけ、ご注意ください。",
-    note: "また来たくなったら、定番で。",
+    point: "忘れ物だけ、確認。",
+    note: "次は、定番で。",
   },
 ];
 
@@ -75,7 +75,7 @@ export default function FlowSection({
   }, []);
 
   const metaRight = useMemo(
-    () => "所要：90分目安　｜　予約：1分　｜　席の希望：一言",
+    () => "所要 約90分　｜　予約 1分　｜　席の希望は備考でOK",
     []
   );
 
@@ -94,8 +94,8 @@ export default function FlowSection({
         <div className={styles.frame}>
           <header className={styles.head} style={{ "--d": "0ms" }}>
             <div className={styles.headLeft}>
-              <p className={styles.kicker}>FLOW</p>
-              <h2 className={styles.title}>当日は、迷わない。</h2>
+              <p className={styles.kicker}>流れ</p>
+          <h2 className={styles.title}>順番は、決まってる。</h2>
               <p className={styles.sub}>予約 → 来店 → 鍋 → 退店。</p>
             </div>
             <p className={styles.meta}>{metaRight}</p>
@@ -144,9 +144,7 @@ export default function FlowSection({
             style={{ "--d": `${120 + FLOW.length * staggerMs + 120}ms` }}
           >
             <p className={styles.noteK}>お願い</p>
-            <p className={styles.noteT}>
-              香りを守りたいので、強い香水は控えてください。
-            </p>
+            <p className={styles.noteT}>香りのため、強い香水は控えてください。</p>
           </div>
         </div>
       </div>

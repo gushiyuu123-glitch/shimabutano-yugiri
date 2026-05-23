@@ -5,8 +5,8 @@ import styles from "./Info.module.css";
 export default function Info({
   id = "info",
 
-  // 架空：実在っぽい番号は避けるならここはダミーでOK
-  phone = "098-000-1234",
+  // 架空：実在誤認を避けるなら空でOK（TELリンクも消える）
+  phone = "",
 
   // ピン住所じゃなく「牧志エリア検索」
   mapUrl =
@@ -25,6 +25,7 @@ export default function Info({
     holiday2: "　　　　17:30 – 22:30（最終入店 20:30）",
   },
 
+  // ✅ ここは残す（営業時間ブロックに統合して使う）
   closed = "水曜日",
 
   access = ["ゆいレール 牧志駅より徒歩圏内", "那覇空港から車で約20分前後"],
@@ -145,20 +146,28 @@ export default function Info({
             </aside>
 
             <header className={styles.titleBlock} style={{ "--d": "80ms" }}>
-              <p className={styles.kicker}>INFO</p>
-              <h2 className={styles.titleVert}>迷わず、辿り着く。</h2>
+              <p className={styles.kicker}>あんない</p>
+              <h2 className={styles.titleVert}>場所と時間。</h2>
             </header>
 
             <div className={styles.diagramWrap} style={{ "--d": "140ms" }}>
               <div className={styles.diagram}>
-                <svg className={styles.wires} viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
+                <svg
+                  className={styles.wires}
+                  viewBox="0 0 1000 520"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
                   <line x1="320" y1="80" x2="320" y2="310" />
                   <circle cx="320" cy="90" r="3.2" />
                   <circle cx="320" cy="190" r="3.2" />
                   <circle cx="320" cy="290" r="3.2" />
                   <line x1="320" y1="90" x2="410" y2="90" />
-                  <line x1="570" y1="135" x2="785" y2="135" />
-                  <circle cx="785" cy="135" r="3.2" />
+
+                  {/* ✅ 削除：定休日ノードへの配線 */}
+                  {/* <line x1="570" y1="135" x2="785" y2="135" /> */}
+                  {/* <circle cx="785" cy="135" r="3.2" /> */}
+
                   <line x1="320" y1="190" x2="410" y2="190" />
                   <line x1="320" y1="290" x2="520" y2="290" />
                   <line x1="210" y1="430" x2="340" y2="430" />
@@ -176,37 +185,44 @@ export default function Info({
                   <p className={styles.textMono}>{hours.weekday}</p>
                   <p className={styles.textMono}>{hours.holiday1}</p>
                   <p className={styles.textMono}>{hours.holiday2}</p>
+                  <p className={styles.textMono}>定休　{closed}</p>
                 </div>
 
-                <div className={`${styles.node} ${styles.nodeClosed}`}>
-                  <p className={styles.label}>定休日</p>
-                  <p className={styles.text}>{closed}</p>
-                </div>
+                {/* ✅ 削除：定休日ノード */}
+                {/* <div className={`${styles.node} ${styles.nodeClosed}`}> ... </div> */}
 
                 <div className={`${styles.node} ${styles.nodeAccess}`}>
                   <p className={styles.label}>アクセス</p>
                   {access.slice(0, 2).map((t) => (
-                    <p key={t} className={styles.text}>{t}</p>
+                    <p key={t} className={styles.text}>
+                      {t}
+                    </p>
                   ))}
                 </div>
 
                 <div className={`${styles.node} ${styles.nodeParking}`}>
                   <p className={styles.label}>駐車場</p>
                   {parking.slice(0, 2).map((t) => (
-                    <p key={t} className={styles.text}>{t}</p>
+                    <p key={t} className={styles.text}>
+                      {t}
+                    </p>
                   ))}
                 </div>
               </div>
             </div>
 
             <aside className={styles.memoWrap} style={{ "--d": "200ms" }}>
-              <p className={styles.memoSide}>お越しの目印</p>
+              <p className={styles.memoSide}>目印</p>
               <div className={styles.memo}>
                 <div className={styles.memoPaper}>
                   {marks.slice(0, 3).map((t) => (
-                    <p key={t} className={styles.memoLine}>{t}</p>
+                    <p key={t} className={styles.memoLine}>
+                      {t}
+                    </p>
                   ))}
-                  <span className={styles.stamp} aria-hidden="true">印</span>
+                  <span className={styles.stamp} aria-hidden="true">
+                    印
+                  </span>
                 </div>
               </div>
             </aside>

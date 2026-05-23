@@ -20,21 +20,21 @@ const COURSES = [
     key: "teiban",
     name: "定番",
     kana: "ていばん",
-    copy: "迷ったら、これが正解。",
+    copy: "いちばん頼まれる。これで満足する。",
     lines: ["島豚：2部位（ロース＋肩ロース）", "島野菜：薬味を一段", "甘味：黒糖＋柑橘"],
     time: "目安 90分",
     price: "¥5,800",
     img: "/images/2.jpeg",
     alt: "豚肉のコース写真",
     pick: true,
-    tag: "迷うならこれ",
+    tag: "いちばん頼まれる",
     nameSvg: "/calli/course-teiban1.svg",
   },
   {
     key: "yugiri",
     name: "湯霧",
     kana: "ゆぎり",
-    copy: "特別な日に。希少部位まで。",
+    copy: "数量限定。特別な日のためだけ。",
     lines: ["島豚：希少部位を含む3部位", "島野菜：きのこ強化", "甘味：黒糖＋季節果実"],
     time: "目安 100分",
     price: "¥7,800",
@@ -63,20 +63,20 @@ export default function CourseSp({ id = "courseSp" }) {
             COURSE
           </RevealText>
 
-<RevealText as="h2" className={styles.title} delay={70}>
-  3つある。<br />
-  迷うなら、定番。
-</RevealText>
+          <RevealText as="h2" className={styles.title} delay={70}>
+            3つ。<br />
+            初回は、定番。
+          </RevealText>
 
           <RevealText as="p" className={styles.lead} delay={140}>
-            はじめての方は「定番」で決まる。
+            はじめては「定番」で決まる。
             <br />
-            違いは量ではなく、部位です。
+            違いは量じゃなく、部位。
           </RevealText>
 
           {/* jump (SP用：迷いを殺す) */}
           <nav className={styles.jump} aria-label="コースへジャンプ">
-            {items.map((c, i) => (
+            {items.map((c) => (
               <a
                 key={c.key}
                 className={`${styles.jumpA} ${c.pick ? styles.jumpPick : ""}`}

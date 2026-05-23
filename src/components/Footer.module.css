@@ -5,21 +5,35 @@
   --ink-rgb:   var(--c-ink-rgb, 25 21 18);
   --gold-rgb:  var(--c-gold-rgb, 201 179 122);
 
-  --line:  rgba(var(--gold-rgb), .20);
-  --line2: rgba(var(--gold-rgb), .14);
+  --line:  rgba(var(--gold-rgb), .18);
+  --line2: rgba(var(--gold-rgb), .12);
 
   position: relative;
-  padding: clamp(44px, 7vh, 86px) 0 clamp(28px, 5vh, 56px);
+  padding: clamp(46px, 7vh, 92px) 0 clamp(26px, 5vh, 58px);
   color: rgb(var(--ink-rgb));
 
-  /* 透明を保ちつつ“閉じ方”だけ整える */
+  /* “閉じる”だけ。グラデは弱くして余韻にする */
   background:
     linear-gradient(
       180deg,
       rgba(var(--paper-rgb), 0) 0%,
-      rgba(var(--paper-rgb), .66) 24%,
-      rgba(var(--paper-rgb), .92) 100%
+      rgba(var(--paper-rgb), .30) 22%,
+      rgba(var(--paper-rgb), .86) 100%
     );
+}
+
+.footer::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.26;
+  /* 紙の微粒（やりすぎない） */
+  background:
+    radial-gradient(1200px 420px at 12% 12%, rgba(0,0,0,.035), transparent 62%),
+    radial-gradient(900px 380px at 88% 38%, rgba(0,0,0,.030), transparent 60%),
+    radial-gradient(700px 320px at 40% 92%, rgba(0,0,0,.025), transparent 58%);
+  mix-blend-mode:multiply;
 }
 
 .inner{
@@ -33,70 +47,107 @@
   background: var(--line);
 }
 
-/* ===== body row ===== */
+/* ===== layout ===== */
 .row{
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
-  gap: clamp(18px, 2.6vw, 44px);
-  padding-top: clamp(26px, 5vh, 52px);
-  padding-bottom: clamp(22px, 4.6vh, 46px);
+  column-gap: clamp(18px, 3.0vw, 60px);
+  padding-top: clamp(22px, 4.8vh, 52px);
+  padding-bottom: clamp(18px, 4.2vh, 44px);
 }
 
 /* ===== brand ===== */
 .brand{
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  opacity: .92;
   min-width: 0;
+  display: grid;
+  gap: 10px;
+  opacity: .92;
 }
 
 .brandMark{
   display: inline-flex;
   align-items: flex-end;
-  gap: 9px;
-  height: 38px;
-  flex: 0 0 auto;
+  gap: 10px;
+  height: 42px;
 }
 
 .logoGlyph{
   display: block;
   height: auto;
-  width: var(--w, 20px);
+  width: var(--w, 22px);
   opacity: var(--o, 1);
   transform: translateY(var(--y, 0px)) scale(var(--s, 1));
-  filter: drop-shadow(0 10px 22px rgba(0,0,0,.10));
+  /* 影は薄く。UIっぽさを消す */
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,.07));
 }
 
-.l1{ --w: 21px; --y: 0px; }
-.l2{ --w: 21px; --y: 1px; }
-.l3{ --w: 9px;  --y: 2px; --s: .94; --o: .78; }
-.lNo{ opacity: .55; }
-.l4{ --w: 21px; --y: 0px; }
-.l5{ --w: 20px; --y: 1px; }
-
-.brandText{
-  display: grid;
-  gap: 6px;
-  min-width: 0;
-}
+.l1{ --w: 22px; --y: 0px; }
+.l2{ --w: 22px; --y: 1px; }
+.l3{ --w: 10px; --y: 2px; --s: .94; --o: .74; }
+.lNo{ opacity: .52; }
+.l4{ --w: 22px; --y: 0px; }
+.l5{ --w: 21px; --y: 1px; }
 
 .brandEn{
   margin: 0;
   font-size: 11px;
-  letter-spacing: 0.22em;
-  opacity: 0.62;
+  letter-spacing: 0.24em;
+  opacity: 0.58;
   white-space: nowrap;
 }
 
-/* ===== meta ===== */
-.meta{
-  justify-self: start;
-  min-width: 0;
+/* ===== right column ===== */
+.right{
+  justify-self: end;
   display: grid;
-  gap: 8px;
-  padding-bottom: 1px;
+  gap: 12px;
+  text-align: right;
+}
+
+/* links: “線”ではなく“気配”の下線 */
+.links{
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  opacity: 0.86;
+  white-space: nowrap;
+}
+
+.link{
+  text-decoration: none;
+  color: rgb(var(--ink-rgb));
+  position: relative;
+  padding-bottom: 3px;
+}
+
+.link::after{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  bottom:0;
+  height: 1px;
+  background: rgba(var(--gold-rgb), .22);
+  transform: scaleX(.62);
+  transform-origin: left;
+  transition: transform 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+              background 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+.link:hover::after{
+  transform: scaleX(1);
+  background: rgba(var(--gold-rgb), .40);
+}
+
+.sep{ opacity: 0.52; }
+
+/* meta */
+.meta{
+  display: grid;
+  gap: 6px;
 }
 
 .metaLine{
@@ -105,80 +156,87 @@
   letter-spacing: 0.06em;
   opacity: 0.74;
   line-height: 1.6;
-}
-
-/* ===== links ===== */
-.links{
-  justify-self: end;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  opacity: 0.84;
   white-space: nowrap;
 }
-
-.link{
-  text-decoration: none;
-  color: rgb(var(--ink-rgb));
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 2px;
-  transition: border-color 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
-}
-.link:hover{ border-bottom-color: rgba(var(--gold-rgb), .46); }
-
-.sep{ opacity: 0.55; }
 
 /* ===== bottom ===== */
 .bottom{
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
-  align-items: center;
-  gap: 14px;
-  padding-top: 14px;
+  padding-top: 12px;
 }
 
 .bottomRule{
+  display: block;
   height: 1px;
   background: var(--line2);
+  margin-bottom: 12px;
+}
+
+.bottomRow{
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 14px;
 }
 
 .copy{
   margin: 0;
   font-size: 11px;
   letter-spacing: 0.16em;
-  opacity: 0.62;
+  opacity: 0.60;
   white-space: nowrap;
 }
 
-/* 本拠地クレジット：出番は小さく、でも“効く” */
 .credit{
-  margin: 0;
   font-size: 11px;
-  letter-spacing: 0.16em;
-  opacity: 0.58;
+  letter-spacing: 0.14em;
+  opacity: 0.56;
   white-space: nowrap;
   text-decoration: none;
   color: rgb(var(--ink-rgb));
-  border-bottom: 1px solid rgba(var(--gold-rgb), .18);
-  padding-bottom: 2px;
+  position: relative;
+  padding-bottom: 3px;
 }
+
+.credit::after{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  bottom:0;
+  height: 1px;
+  background: rgba(var(--gold-rgb), .18);
+  transform: scaleX(.52);
+  transform-origin: left;
+  transition: transform 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+              opacity 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
 .credit:hover{
   opacity: 0.72;
-  border-bottom-color: rgba(var(--gold-rgb), .34);
+}
+.credit:hover::after{
+  transform: scaleX(1);
 }
 
 .stamp{
-  width: 28px;
-  height: 28px;
-  border: 2px solid rgba(190, 60, 50, 0.58);
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(190, 60, 50, 0.52);
   color: rgba(190, 60, 50, 0.62);
   display: grid;
   place-items: center;
   font-size: 11px;
   letter-spacing: 0.18em;
+  transform: rotate(-9deg);
+  opacity: .92;
+}
+
+.demo{
+  margin: 10px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  opacity: 0.52;
+  line-height: 1.6;
 }
 
 /* ===== a11y ===== */
@@ -197,16 +255,26 @@
   .row{
     grid-template-columns: 1fr;
     align-items: start;
+    row-gap: 18px;
+  }
+
+  .right{
+    justify-self: start;
+    text-align: left;
   }
 
   .links{
-    justify-self: start;
+    justify-content: flex-start;
     white-space: normal;
     flex-wrap: wrap;
     row-gap: 8px;
   }
 
-  .bottom{
+  .metaLine{
+    white-space: normal;
+  }
+
+  .bottomRow{
     grid-template-columns: 1fr;
     gap: 10px;
   }

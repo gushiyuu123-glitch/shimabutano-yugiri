@@ -255,7 +255,6 @@ export default function Hero() {
       ref={sectionRef}
       id="hero"
       className={`${styles.hero} ${inView ? styles.isIn : ""} ${reduce ? styles.reduce : ""}`}
-      // ✅ CSS側の背景もこの1行で確定（差し替え事故ゼロ）
       style={{ "--heroImg": `url("${HERO_IMG}")` }}
     >
       {/* 背景：スクロール担当 wrapper + 呼吸担当 bg */}
@@ -264,7 +263,9 @@ export default function Hero() {
       </div>
 
       {/* 意味はH1で残す（見た目はSVG） */}
-      <h1 className={styles.srOnly}>島豚の湯霧</h1>
+      <h1 className={styles.srOnly}>
+        OKINAWA / SHABU-SHABU　島豚の湯霧　出汁で、決まる。　沖縄豚 しゃぶしゃぶ　目安 90分
+      </h1>
 
       {/* 右上：筆文字（SVG1文字ずつ） */}
       <div className={styles.calli} role="img" aria-label="島豚の湯霧">
@@ -279,7 +280,6 @@ export default function Hero() {
             aria-hidden="true"
             decoding="async"
             draggable="false"
-            // 「最初から存在してる」事故を殺す
             style={{ "--clip": "100%", "--m": "-80" }}
           />
         ))}
@@ -296,54 +296,21 @@ export default function Hero() {
         decoding="async"
       />
 
-      {/* 左下：情報（読める・決めれる） */}
+      {/* 左下：PCだけ（kicker + meta のみ） */}
       <div className={styles.dock}>
-        {/* PC */}
         <div className={styles.pc}>
           <div className={`${styles.kicker} ${styles.reveal}`} style={{ "--d": "40ms" }}>
             OKINAWA / SHABU-SHABU
           </div>
-
-          <p className={`${styles.sub} ${styles.reveal}`} style={{ "--d": "210ms" }}>
-            沖縄豚 しゃぶしゃぶ
-            <span className={styles.dot} aria-hidden="true">
-              ・
-            </span>
-            一口目で、納得。
-          </p>
-
+<p className={`${styles.sub} ${styles.reveal}`} style={{ "--d": "210ms" }}>
+  出汁は一種。最初の一口は、そのまま。
+</p>
           <div className={`${styles.metaRow} ${styles.reveal}`} style={{ "--d": "290ms" }}>
-            <span className={styles.metaLabel}>Course</span>
-            <span className={styles.metaNum}>
-              ¥4,200 <span className={styles.metaSep}>–</span> ¥7,800
-            </span>
+            <span className={styles.metaLabel}>沖縄豚 しゃぶしゃぶ</span>
             <span className={styles.metaDivider} aria-hidden="true">
               ／
             </span>
-            <span className={styles.metaLabel}>目安</span>
-            <span className={styles.metaVal}>90分前後</span>
-          </div>
-        </div>
-
-        {/* SP */}
-        <div className={styles.sp}>
-          <div className={`${styles.kicker} ${styles.reveal}`} style={{ "--d": "40ms" }}>
-            OKINAWA / SHABU-SHABU
-          </div>
-
-          <p className={`${styles.subSp} ${styles.reveal}`} style={{ "--d": "210ms" }}>
-            沖縄豚 しゃぶしゃぶ
-            <span className={styles.dot} aria-hidden="true">
-              ・
-            </span>
-            一口目で、納得。
-          </p>
-
-          <div className={`${styles.metaRowSp} ${styles.reveal}`} style={{ "--d": "290ms" }}>
-            <span className={styles.metaLabel}>Course</span>
-            <span className={styles.metaNum}>
-              ¥4,200 <span className={styles.metaSep}>–</span> ¥7,800
-            </span>
+            <span className={styles.metaVal}>目安 90分</span>
           </div>
         </div>
       </div>

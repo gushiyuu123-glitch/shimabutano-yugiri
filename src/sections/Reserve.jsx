@@ -7,16 +7,13 @@ export default function Reserve({
   photoSrc = "/images/store1.jpeg",
   photoAlt = "店内の写真（イメージ）",
 
-  // ✅ 架空のデフォルト（実在っぽい番号は避ける）
-  phone = "098-000-1234",
+  // ✅ 架空デフォルト（実在誤認を避ける）
+  phone = "（デモ）000-0000-0000",
 
-  // ✅ ここで「デモ」を明示（世界観を壊さない最小）
+  // ✅ デモ明示（温度を落としすぎない最小）
   notice = "※架空サイトのデモです。送信内容は保存されません。",
 
-  // ✅ 当日枠の文法（前に決めた運用ルールに近い）
   sameDay = "当日枠：空き次第（埋まり次第終了）",
-
-  // ✅ 電話受付の“雰囲気”だけ残す（実運用では差し替える）
   hours = "受付目安：11:00–22:00",
 
   // 実運用にしたい時だけ渡す（デフォはデモ）
@@ -49,7 +46,6 @@ export default function Reserve({
     return () => io.disconnect();
   }, []);
 
-  // ✅ 営業時間に合わせて現実的な開始枠に寄せる（昼/夜）
   const TIMES = useMemo(() => ["11:30", "17:30", "19:30", "20:30"], []);
   const PEOPLE = useMemo(() => ["1", "2", "3", "4", "5", "6"], []);
   const SEATS = useMemo(
@@ -88,7 +84,7 @@ export default function Reserve({
 
     setStatus("sending");
     try {
-      // ✅ 実運用：外から渡されたonSubmitがある時だけ呼ぶ
+      // ✅ 実運用
       if (onSubmit) {
         await onSubmit(form);
         setPreview(null);
@@ -96,7 +92,7 @@ export default function Reserve({
         return;
       }
 
-      // ✅ デモ：送信した内容を画面に出して終わる（保存しない）
+      // ✅ デモ：画面表示だけ（保存しない）
       await new Promise((r) => setTimeout(r, 360));
       setPreview({
         date: form.date,
@@ -137,8 +133,8 @@ export default function Reserve({
           <div className={`${styles.panel} ${styles.right}`} style={{ "--d": "120ms" }}>
             <div className={styles.rightInner}>
               <header className={styles.head}>
-                <p className={styles.kicker}>RESERVATION</p>
-                <h2 className={styles.title}>席を取る。それだけ。</h2>
+                <p className={styles.kicker}>よやく</p>
+              <h2 className={styles.title}>席を押さえる。</h2>
                 <p className={styles.sub}>フォームは2分。急ぎは電話。</p>
                 <p className={styles.meta}>{sameDay}</p>
               </header>
@@ -164,9 +160,13 @@ export default function Reserve({
                       onChange={set("time")}
                       required
                     >
-                      <option value="" disabled>--:--</option>
+                      <option value="" disabled>
+                        --:--
+                      </option>
                       {TIMES.map((t) => (
-                        <option key={t} value={t}>{t}</option>
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
                       ))}
                     </select>
                   </label>
@@ -180,7 +180,9 @@ export default function Reserve({
                       required
                     >
                       {PEOPLE.map((p) => (
-                        <option key={p} value={p}>{p} 名様</option>
+                        <option key={p} value={p}>
+                          {p} 名様
+                        </option>
                       ))}
                     </select>
                   </label>
@@ -205,7 +207,7 @@ export default function Reserve({
                     <input
                       className={styles.input}
                       type="tel"
-                      placeholder="例）090-1234-5678"
+                      placeholder="例）000-0000-0000"
                       value={form.tel}
                       onChange={set("tel")}
                       required
@@ -219,7 +221,9 @@ export default function Reserve({
                   <span className={styles.label}>席の希望（任意）</span>
                   <select className={styles.select} value={form.seat} onChange={set("seat")}>
                     {SEATS.map((s) => (
-                      <option key={s.v} value={s.v}>{s.t}</option>
+                      <option key={s.v} value={s.v}>
+                        {s.t}
+                      </option>
                     ))}
                   </select>
                 </label>
@@ -240,39 +244,45 @@ export default function Reserve({
                     "送信中…"
                   ) : (
                     <>
-                      <span className={styles.ctaLabel}>この内容で送信する</span>
-                      <span className={styles.ctaArrow} aria-hidden="true">→</span>
+                      <span className={styles.ctaLabel}>この内容で席を押さえる</span>
+                      <span className={styles.ctaArrow} aria-hidden="true">
+                        →
+                      </span>
                     </>
                   )}
                 </button>
 
                 <p className={styles.help}>
                   {status === "done"
-                    ? "送信内容を表示しました（デモ）。"
-                    : "送信はデモ表示です。実際の予約にはつながりません。"}
+                    ? "送信しました（デモ表示）。"
+                    : "※デモ表示：予約は確定しません。"}
                 </p>
 
                 {status === "error" && (
-                  <p className={styles.error}>必須項目（日時/人数/お名前/電話）を確認してください。</p>
+                  <p className={styles.error}>日時・人数・お名前・電話を確認してください。</p>
                 )}
 
-                {/* ✅ デモ時だけ：送信内容のプレビュー（世界観を壊さない薄さ） */}
                 {preview && (
-                  <div className={styles.preview} aria-label="送信内容（デモ表示）">
-                    <p className={styles.previewK}>送信内容（デモ）</p>
+                  <div className={styles.preview} aria-label="入力内容（デモ表示）">
+                    <p className={styles.previewK}>入力内容（デモ）</p>
                     <p className={styles.previewT}>
                       {preview.date} / {preview.time} / {preview.people}名 / {preview.seat}
                       <br />
                       {preview.name}（{preview.tel}）
-                      {preview.note ? <><br />{preview.note}</> : null}
+                      {preview.note ? (
+                        <>
+                          <br />
+                          {preview.note}
+                        </>
+                      ) : null}
                     </p>
                   </div>
                 )}
               </form>
 
-              {/* ✅ 電話ブロックは“リンクなし”で残す（架空誤認を防ぐ） */}
-              <div className={styles.call} aria-label="電話でのご案内（参考）">
-                <p className={styles.callLead}>電話でも予約できます（参考）</p>
+              {/* ✅ 架空誤認を防ぐ：リンク無し */}
+              <div className={styles.call} aria-label="電話での予約">
+                <p className={styles.callLead}>電話でも予約できます</p>
                 <p className={styles.callNum}>{phone}</p>
                 <p className={styles.hours}>{hours}</p>
                 <p className={styles.notice}>{notice}</p>

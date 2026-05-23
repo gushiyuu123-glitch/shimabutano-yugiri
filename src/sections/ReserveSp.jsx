@@ -7,7 +7,6 @@ export default function ReserveSp({
   photoSrc = "/images/store1.jpeg",
   photoAlt = "店内の写真（イメージ）",
 
-  // ✅ 架空（実在誤認を避ける）
   phone = "（デモ）000-0000-0000",
   mapUrl = "https://www.google.com/maps/search/?api=1&query=%E9%82%A3%E8%A6%87+%E7%89%A7%E5%BF%97",
 
@@ -15,7 +14,6 @@ export default function ReserveSp({
   sameDay = "当日枠：空き次第（埋まり次第終了）",
   hours = "受付目安：11:00–22:00",
 
-  // 実運用にしたい時だけ渡す（デフォはデモ）
   onSubmit,
 }) {
   const rootRef = useRef(null);
@@ -45,7 +43,6 @@ export default function ReserveSp({
     return () => io.disconnect();
   }, []);
 
-  // ✅ 開始枠（現実の店っぽいが“嘘の住所”は出さない）
   const TIMES = useMemo(() => ["11:30", "17:30", "19:30", "20:30"], []);
   const PEOPLE = useMemo(() => ["1", "2", "3", "4", "5", "6"], []);
   const SEATS = useMemo(
@@ -77,7 +74,6 @@ export default function ReserveSp({
     e.preventDefault();
     if (status === "sending") return;
 
-    // 必須
     if (!form.date || !form.time || !form.people || !form.name || !form.tel) {
       setStatus("error");
       return;
@@ -92,7 +88,6 @@ export default function ReserveSp({
         return;
       }
 
-      // ✅ デモ：画面表示だけ（保存しない）
       await new Promise((r) => setTimeout(r, 360));
       setPreview({ ...form });
       setStatus("done");
@@ -125,14 +120,13 @@ export default function ReserveSp({
           <div className={`${styles.panel} ${styles.formPanel}`} style={{ "--d": "120ms" }}>
             <div className={styles.formInner}>
               <header className={styles.head}>
-                <p className={styles.kicker}>RESERVATION</p>
-                <h2 className={styles.title}>席を取る。それだけ。</h2>
-                <p className={styles.sub}>フォームは2分。急ぎは電話（参考）。</p>
+                <p className={styles.kicker}>よやく</p>
+              <h2 className={styles.title}>席を押さえる。</h2>
+                <p className={styles.sub}>フォームは2分。急ぎは電話。</p>
                 <p className={styles.meta}>{sameDay}</p>
               </header>
 
               <form className={styles.form} onSubmit={submit}>
-                {/* 1列：SPで迷わせない */}
                 <div className={styles.row}>
                   <label className={styles.field}>
                     <span className={styles.label}>ご希望日</span>
@@ -237,7 +231,7 @@ export default function ReserveSp({
                     "送信中…"
                   ) : (
                     <>
-                      <span className={styles.ctaLabel}>この内容で送信する</span>
+                      <span className={styles.ctaLabel}>この内容で席を押さえる</span>
                       <span className={styles.ctaArrow} aria-hidden="true">
                         →
                       </span>
@@ -247,19 +241,19 @@ export default function ReserveSp({
 
                 <p className={styles.help} aria-live="polite">
                   {status === "done"
-                    ? "送信内容を表示しました（デモ）。"
-                    : "送信はデモ表示です。実際の予約にはつながりません。"}
+                    ? "送信しました（デモ表示）。"
+                    : "※デモ表示：予約は確定しません。"}
                 </p>
 
                 {status === "error" && (
                   <p className={styles.error} role="alert">
-                    必須項目（日時/人数/お名前/電話）を確認してください。
+                    日時・人数・お名前・電話を確認してください。
                   </p>
                 )}
 
                 {preview && (
-                  <div className={styles.preview} aria-label="送信内容（デモ表示）">
-                    <p className={styles.previewK}>送信内容（デモ）</p>
+                  <div className={styles.preview} aria-label="入力内容（デモ表示）">
+                    <p className={styles.previewK}>入力内容（デモ）</p>
                     <p className={styles.previewT}>
                       {preview.date} / {preview.time} / {preview.people}名 / {preview.seat}
                       <br />
@@ -275,13 +269,12 @@ export default function ReserveSp({
                 )}
               </form>
 
-              {/* 電話ブロック：リンク無し（誤認防止） */}
-              <div className={styles.call} aria-label="電話でのご案内（参考）">
-                <p className={styles.callLead}>電話でも予約できます（参考）</p>
+              <div className={styles.call} aria-label="電話での予約">
+                <p className={styles.callLead}>電話でも予約できます</p>
                 <p className={styles.callNum}>{phone}</p>
                 <p className={styles.hours}>{hours}</p>
 
-                <div className={styles.callLinks} aria-label="地図（参考）">
+                <div className={styles.callLinks} aria-label="地図">
                   <a className={styles.mapLink} href={mapUrl} target="_blank" rel="noreferrer noopener">
                     MAP →
                   </a>
@@ -297,7 +290,6 @@ export default function ReserveSp({
             </div>
           </div>
 
-          {/* “線は残す”：SPは中央線じゃなく、上端の細いルールで締める */}
           <span className={styles.topRule} aria-hidden="true" />
         </div>
       </div>
