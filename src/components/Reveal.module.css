@@ -1,0 +1,78 @@
+/* src/components/Reveal.module.css */
+
+.base{
+  opacity: 0;
+  transition-delay: var(--d, 0ms);
+  will-change: opacity, transform;
+}
+
+/* 文字：像が整う（index.css の --dur-1 / --ease-out を参照） */
+.text{
+  transform: translate3d(0, 18px, 0) scale(0.995);
+  transition:
+    opacity var(--dur-1, 680ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform var(--dur-1, 680ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+/* 画像/背景：ガクを避けるため y を使わず scale中心 */
+.media{
+  transform: translate3d(0, 0, 0) scale(1.035);
+  transform-origin: 50% 50%;
+  transition:
+    opacity var(--dur-2, 920ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform var(--dur-2, 920ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+/* 手書き/筆：マスクで“一度だけ走らせる” */
+.ink{
+  transform: translate3d(0,0,0) scale(1.01) rotate(-0.6deg);
+  transform-origin: 50% 50%;
+  transition:
+    opacity 760ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform 760ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    -webkit-mask-position 860ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    mask-position 860ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+
+  /* インク走り（非対応環境はただのopacity/transformになる） */
+  -webkit-mask-image: linear-gradient(
+    110deg,
+    transparent 0%,
+    #000 18%,
+    #000 52%,
+    transparent 74%
+  );
+  mask-image: linear-gradient(
+    110deg,
+    transparent 0%,
+    #000 18%,
+    #000 52%,
+    transparent 74%
+  );
+  -webkit-mask-size: 240% 100%;
+  mask-size: 240% 100%;
+  -webkit-mask-position: 120% 0%;
+  mask-position: 120% 0%;
+}
+
+.isIn{
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1);
+}
+
+/* inkはmaskも動かす */
+.isIn.ink{
+  -webkit-mask-position: -20% 0%;
+  mask-position: -20% 0%;
+  transform: translate3d(0,0,0) scale(1) rotate(0deg);
+}
+
+/* Reduce motion：全部即表示 + mask無効 */
+@media (prefers-reduced-motion: reduce){
+  .base{
+    opacity: 1;
+    transform: none;
+    transition: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

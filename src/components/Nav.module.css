@@ -1,0 +1,186 @@
+/* src/components/Nav.module.css */
+
+.srOnly{
+  position:absolute;
+  width:1px; height:1px;
+  padding:0; margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+
+/* ===== Fixed Nav ===== */
+.nav{
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--nav-h);
+  z-index: 50;
+}
+
+/* “紙の上の薄膜”は inner にだけ持たせる（濁らせない） */
+.inner{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0 var(--nav-pad-x);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(var(--c-paper-rgb), .86),
+    rgba(var(--c-paper-rgb), .62)
+  );
+
+  backdrop-filter: blur(10px) saturate(112%);
+  -webkit-backdrop-filter: blur(10px) saturate(112%);
+
+  border-bottom: 1px solid rgba(var(--c-gold-rgb), .16);
+}
+
+/* backdrop 非対応は透けすぎ事故を防ぐ（“紙”として置く） */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))){
+  .inner{
+    background: rgba(var(--c-paper-rgb), .94);
+  }
+}
+
+/* ===== Entrance (像が整う) ===== */
+.isOff{
+  opacity: 0;
+  transform: translate3d(0,-10px,0) scale(0.995);
+  transition:
+    opacity var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
+  pointer-events: none;
+}
+.isOn{
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1);
+  transition:
+    opacity var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
+  pointer-events: auto;
+}
+
+/* ===== Brand ===== */
+.brand{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(var(--c-ink-rgb), .92);
+  text-decoration: none;
+}
+
+.brandMark{
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 7px;
+  height: 38px;
+}
+
+.logoGlyph{
+  display: block;
+  height: auto;
+  width: var(--w, 20px);
+  opacity: var(--o, 1);
+  transform: translateY(var(--y, 0px)) scale(var(--s, 1));
+
+  /* 影は“品”を壊しやすいので薄く */
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.10));
+}
+
+.l1{ --w: 21px; --y: 0px; }
+.l2{ --w: 21px; --y: 1px; }
+.l3{ --w: 11px; --y: 2px; --s: .98; }
+.l4{ --w: 21px; --y: 0px; }
+.l5{ --w: 20px; --y: 1px; }
+.lNo{ opacity: .62; }
+
+/* ===== Links ===== */
+.links{
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* SP横スクロールを確実に効かせるため “inline-flex” をやめる */
+.list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+/* liは構造保持だけ。見た目は a で完結 */
+.item{
+  display: inline-flex;
+  align-items: center;
+}
+
+.link{
+  font-family: var(--ff-ui);
+  font-size: 13px;
+  letter-spacing: .08em;
+
+  color: rgba(var(--c-ink-rgb), .74);
+  position: relative;
+  padding: 10px 2px;
+
+  transition: color 220ms ease;
+}
+.link:hover{
+  color: rgba(var(--c-ink-rgb), .92);
+}
+
+/* 区切りは “ただの間” にする（主張しない） */
+.sep{
+  opacity: .20;
+  color: rgba(var(--c-ink-rgb), .60);
+  padding: 0 2px;
+}
+
+/* ✅ Active：下線は禁止。濃度（インク）だけで勝つ */
+.isActive{
+  color: rgba(var(--c-ink-rgb), .92);
+}
+
+/* 触った時の“像が締まる”薄い補助（やりすぎ禁止） */
+.isActive{
+  text-shadow: 0 10px 22px rgba(0,0,0,.06);
+}
+
+/* ===== SP ===== */
+@media (max-width: 860px){
+  .inner{ padding: 0 16px; gap: 16px; }
+  .brandMark{ height: 35px; gap: 6px; }
+
+  .links{ justify-content: flex-end; }
+
+  .list{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    padding-right: 10px;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 92%, transparent 100%);
+  }
+  .list::-webkit-scrollbar{ display:none; }
+}
+
+/* ===== Reduce motion ===== */
+@media (prefers-reduced-motion: reduce){
+  .isOff, .isOn{ transition:none; transform:none; }
+}

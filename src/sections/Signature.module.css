@@ -1,0 +1,207 @@
+/* src/sections/Signature.module.css */
+
+.section{
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  /* 余白 */
+  padding-top: clamp(120px, 14vh, 200px);
+  padding-bottom: clamp(130px, 16vh, 220px);
+
+  /* ✅ index.css と同期（紙/墨の温度差事故を潰す） */
+  --paper-rgb: var(--c-paper-rgb, 248 244 236);
+  --ink-rgb:   var(--c-ink-rgb, 34 30 26);
+  --gold-rgb:  var(--c-gold-rgb, 201 179 122);
+
+  --dur: var(--dur-1, 680ms);
+  --ease: var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+
+  /* 背景写真の“気配”調整 */
+  --imgOpacity: .56; /* 0.52〜0.62 */
+  --imgY: 72%;
+  --veilTop: .22;
+  --veilBottom: .46;
+
+  background:
+    radial-gradient(900px 520px at 12% 0%, rgba(var(--c-pork-rgb, 231 201 196), .10), transparent 58%),
+    radial-gradient(900px 520px at 88% 18%, rgba(var(--gold-rgb), .08), transparent 62%),
+    rgb(var(--paper-rgb));
+
+  color: rgb(var(--ink-rgb));
+}
+
+/* 背景：鍋は“写真”にしない。気配に落とす */
+.section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+
+  background-image:
+    radial-gradient(1100px 720px at 50% 58%, rgba(0,0,0,.10), transparent 62%),
+    url("/images/dashi-pot.png");
+  background-repeat: no-repeat;
+  background-size: cover, cover;
+  background-position: center var(--imgY), center var(--imgY);
+
+  opacity: var(--imgOpacity);
+
+  /* ✅ blur強すぎ禁止：気配だけ */
+  filter: blur(.35px) saturate(1.02) contrast(1.05) brightness(.98);
+  transform: scale(1.03);
+
+  /* 端だけ溶かす（敷いた感を殺す） */
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,.92) 46%,
+    rgba(0,0,0,.56) 72%,
+    transparent 88%
+  );
+  mask-image: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,.92) 46%,
+    rgba(0,0,0,.56) 72%,
+    transparent 88%
+  );
+
+  mix-blend-mode: multiply;
+}
+
+/* 紙膜：背景を整えて“文字が勝つ”下地 */
+.section::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(var(--paper-rgb), var(--veilTop)),
+      rgba(var(--paper-rgb), var(--veilBottom))
+    ),
+    radial-gradient(1200px 720px at 50% 62%, rgba(var(--paper-rgb), 0), rgba(var(--paper-rgb), .16));
+}
+
+/* 中央の器 */
+.wrap{
+  position: relative;
+  z-index: 1;
+  width: var(--wrap, min(1680px, 100%));
+  margin: 0 auto;
+  padding: 0 var(--pad-x, clamp(18px, 3.2vw, 84px));
+}
+
+.stack{
+  position: relative;
+  width: min(900px, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* 可読性の核心：紙ハロー（“板”に見せない） */
+.stack::before{
+  content:"";
+  position:absolute;
+  inset: -56px -96px;
+  pointer-events:none;
+  z-index: 0;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(var(--paper-rgb), .94) 0%,
+    rgba(var(--paper-rgb), .78) 44%,
+    rgba(var(--paper-rgb), .34) 72%,
+    transparent 88%
+  );
+
+  filter: blur(14px);
+  border-radius: 999px;
+}
+
+.stack > *{
+  position: relative;
+  z-index: 1;
+}
+
+.kicker{
+  font-family: var(--ff-ui, system-ui);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  opacity: .72;
+}
+
+.h2{
+  margin-top: 16px;
+  font-family: var(--ff-display, serif);
+  font-weight: 600;
+  font-size: clamp(24px, 2.5vw, 36px);
+  letter-spacing: .01em;
+  line-height: 1.22;
+  color: rgba(var(--ink-rgb), .94);
+}
+
+.body{
+  margin: 20px auto 0;
+  max-width: 52ch;
+}
+
+.p{
+  margin: 0;
+  font-family: var(--ff-ui, system-ui);
+  font-size: 15px;
+  letter-spacing: .02em;
+  line-height: 1.95;
+  color: rgba(var(--ink-rgb), .80);
+}
+.p + .p{ margin-top: 14px; }
+
+.pStrong{
+  margin: 16px 0 0;
+  font-family: var(--ff-ui, system-ui);
+  font-size: 15px;
+  letter-spacing: .02em;
+  line-height: 1.95;
+  color: rgba(var(--ink-rgb), .92);
+}
+
+.closer{
+  margin-top: clamp(44px, 6vh, 82px);
+  font-family: var(--ff-ui, system-ui);
+  font-size: 13px;
+  letter-spacing: .10em;
+  color: rgba(var(--ink-rgb), .62);
+}
+
+/* SP：読みやすさ最優先 */
+@media (max-width: 860px){
+  .section{
+    --imgOpacity: .50;
+    --veilBottom: .52;
+    --imgY: 68%;
+  }
+
+  .stack::before{
+    inset: -44px -56px;
+    filter: blur(12px);
+  }
+
+  .p, .pStrong{
+    font-size: 16px;
+    line-height: 1.98;
+  }
+}
+
+/* Reduce motion：過剰なブレを避ける（今はアニメ無しなので最低限） */
+@media (prefers-reduced-motion: reduce){
+  .section::before{
+    filter: saturate(1.02) contrast(1.04) brightness(.98);
+  }
+}

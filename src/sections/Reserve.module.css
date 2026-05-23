@@ -1,0 +1,428 @@
+/* src/sections/Reserve.module.css */
+
+.section{
+  /* ✅ index.css と同期：紙/墨/金 */
+  --paper-rgb: var(--c-paper-rgb, 243 238 230);
+  --ink-rgb:   var(--c-ink-rgb, 25 21 18);
+  --gold-rgb:  var(--c-gold-rgb, 201 179 122);
+
+  position: relative;
+  isolation: isolate;
+
+  /* ✅ 余白：決断前の“落ち着き” */
+  padding-top: clamp(110px, 12vh, 180px);
+  padding-bottom: clamp(120px, 13vh, 210px);
+
+  color: rgb(var(--ink-rgb));
+  background:
+    radial-gradient(1200px 520px at 18% 0%, rgba(var(--ink-rgb), .035), transparent 60%),
+    radial-gradient(900px 520px at 88% 18%, rgba(var(--ink-rgb), .030), transparent 62%),
+    linear-gradient(180deg, rgba(var(--paper-rgb), 1), rgba(var(--paper-rgb), .985));
+
+  /* 固定navジャンプ */
+  scroll-margin-top: calc(var(--nav-h, 76px) + 18px);
+}
+
+/* 紙の粒（ごく薄く） */
+.section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:.06;
+  mix-blend-mode:multiply;
+  background:
+    radial-gradient(1px 1px at 18% 22%, rgba(0,0,0,.26), transparent 58%),
+    radial-gradient(1px 1px at 62% 34%, rgba(0,0,0,.22), transparent 58%),
+    radial-gradient(1px 1px at 78% 66%, rgba(0,0,0,.18), transparent 58%),
+    radial-gradient(1px 1px at 32% 76%, rgba(0,0,0,.16), transparent 58%);
+}
+
+.wrap{
+  /* ✅ 1680は広すぎる：決断セクションは距離を縮める */
+  width: min(1320px, 100%);
+  margin: 0 auto;
+  padding: 0 var(--pad-x, clamp(18px, 3.2vw, 84px));
+  position: relative;
+  z-index: 1;
+}
+
+.frame{
+  position: relative;
+  display: grid;
+
+  /* 右＝フォームに少し余裕（現行の思想は維持） */
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+
+  min-height: clamp(680px, 82vh, 920px);
+
+  /* ✅ 線は“薄金”へ寄せる（黒の板感を消す） */
+  border: 1px solid rgba(var(--gold-rgb), .20);
+
+  /* ✅ 板にしない：白を塗らず“膜”にする */
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.12));
+
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.08),
+    0 10px 30px rgba(0,0,0,.05);
+
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* 中央線：署名。黒じゃなく薄金 */
+.midLine{
+  position: absolute;
+  left: 47.2%;
+  top: -8px;
+  height: calc(100% + 90px);
+  width: 1px;
+  background: rgba(var(--gold-rgb), .24);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* reveal */
+.panel{
+  opacity: 0;
+  transform: translateY(18px) scale(0.995);
+}
+.in .panel{
+  animation: fadeUp var(--dur-1, 680ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes fadeUp{
+  to{ opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce){
+  .panel{ opacity: 1; transform: none; animation: none !important; }
+}
+
+/* =========================
+   LEFT (画像)
+========================= */
+.left{
+  position: relative;
+  overflow: hidden;
+}
+
+.visual{
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  isolation: isolate;
+}
+
+.visualImg{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  /* ✅ 写真を“紙”に寄せる：彩度を抑え、黒を持ち上げる */
+  filter: saturate(.92) contrast(.98) brightness(1.03);
+  transform: scale(1.04) translateX(1.2%);
+}
+
+/* ✅ 写真の上に“紙膜”を敷く（板にしない） */
+.visual::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  background:
+    radial-gradient(900px 700px at 30% 30%, rgba(var(--paper-rgb), .16), transparent 60%),
+    linear-gradient(180deg, rgba(var(--paper-rgb), .10), rgba(var(--paper-rgb), .20));
+  mix-blend-mode: multiply;
+  opacity: .62;
+}
+
+.visualCap{
+  position: absolute;
+  left: clamp(14px, 2vw, 24px);
+  bottom: clamp(14px, 2vw, 24px);
+  display: grid;
+  gap: 6px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  z-index: 2;
+}
+
+.visualKicker{
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  opacity: 0.74;
+}
+
+.visualName{
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 0.10em;
+  opacity: 0.86;
+}
+
+/* =========================
+   RIGHT (フォーム)
+========================= */
+.right{
+  position: relative;
+  padding: clamp(18px, 2.4vw, 44px);
+
+  /* 中央線から少し離して“呼吸” */
+  padding-left: clamp(22px, 3.1vw, 58px);
+  padding-right: clamp(16px, 2.1vw, 44px);
+}
+
+.rightInner{
+  position: relative;
+  height: 100%;
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding-top: clamp(6px, 1.1vh, 14px);
+}
+
+/* 背景ワード（薄金に寄せる） */
+.formWord{
+  position: absolute;
+  right: 10px;
+  top: 18px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: clamp(64px, 5.4vw, 96px);
+  letter-spacing: 0.10em;
+  line-height: 1;
+  opacity: 0.14;
+  color: rgba(var(--gold-rgb), .64);
+  pointer-events: none;
+}
+
+.head{ padding-top: 6px; }
+
+.kicker{
+  margin: 0 0 10px;
+  letter-spacing: 0.18em;
+  font-size: 12px;
+  opacity: 0.82;
+}
+
+.title{
+  margin: 0;
+  font-size: clamp(26px, 2.3vw, 34px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+}
+
+.sub{
+  margin: 10px 0 0;
+  font-size: 13px;
+  opacity: 0.78;
+  text-wrap: pretty;
+}
+
+.form{
+  display: grid;
+  gap: 18px;
+  max-width: 560px;
+}
+
+.row3{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 0.8fr);
+  gap: clamp(14px, 2vw, 22px);
+}
+
+.row2{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(14px, 2vw, 22px);
+}
+
+.field{
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.label{
+  font-size: 12px;
+  opacity: 0.78;
+  letter-spacing: 0.04em;
+}
+
+.input,
+.select{
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(var(--gold-rgb), .44); /* ✅ 線＝薄金 */
+  background: transparent;
+  padding: 12px 0 10px;
+  font-size: 15px;
+  outline: none;
+  border-radius: 0;
+  color: rgb(var(--ink-rgb));
+}
+
+.input::placeholder{
+  color: rgba(var(--ink-rgb), .42);
+}
+
+.input:focus,
+.select:focus{
+  border-bottom-color: rgba(var(--gold-rgb), .74);
+}
+
+.select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 26px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(var(--ink-rgb), .62) 50%),
+    linear-gradient(135deg, rgba(var(--ink-rgb), .62) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 58%,
+    calc(100% - 9px) 58%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* CTA：台帳の文法（丸角なし） */
+.cta{
+  margin-top: 6px;
+  height: 44px;
+  border: 1px solid rgba(var(--ink-rgb), .62);
+  border-bottom-width: 2px;
+  background: transparent;
+  color: rgb(var(--ink-rgb));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  border-radius: 0;
+  width: fit-content;
+  padding: 0 18px;
+  transition:
+    background-color 180ms var(--ease-out, cubic-bezier(0.22,1,0.36,1)),
+    color 180ms var(--ease-out, cubic-bezier(0.22,1,0.36,1)),
+    transform 180ms var(--ease-out, cubic-bezier(0.22,1,0.36,1));
+}
+
+.cta:hover{
+  background: rgb(var(--ink-rgb));
+  color: rgb(var(--paper-rgb));
+  transform: translateY(-1px);
+}
+
+.cta:disabled{
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+
+.ctaLabel{ line-height: 1; }
+.ctaArrow{ font-size: 12px; opacity: 0.85; }
+
+.help{
+  margin: -6px 0 0;
+  font-size: 12px;
+  opacity: 0.72;
+}
+
+.error{
+  margin: -6px 0 0;
+  font-size: 12px;
+  color: rgba(160, 30, 30, 0.92);
+}
+
+/* call */
+.call{
+  margin-top: 6px;
+  border-top: 1px solid rgba(var(--gold-rgb), .22);
+  padding-top: 14px;
+  max-width: 560px;
+  display: grid;
+  gap: 8px;
+}
+
+.callLead{
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.10em;
+  opacity: 0.74;
+}
+
+.callNum{
+  margin: 0;
+  font-size: clamp(22px, 1.9vw, 28px);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  color: rgb(var(--ink-rgb));
+  width: fit-content;
+  border-bottom: 1px solid rgba(var(--gold-rgb), .26);
+  padding-bottom: 2px;
+}
+.callNum:hover{
+  border-bottom-color: rgba(var(--gold-rgb), .46);
+}
+
+.hours{
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.68;
+}
+
+/* Responsive */
+@media (max-width: 980px){
+  .frame{
+    grid-template-columns: 1fr;
+    min-height: unset;
+  }
+  .midLine{ display: none; }
+
+  .left{
+    height: clamp(240px, 34vh, 340px);
+    border-bottom: 1px solid rgba(var(--gold-rgb), .22);
+  }
+
+  .visualImg{ transform: none; }
+
+  .formWord{
+    writing-mode: horizontal-tb;
+    right: auto;
+    left: 0;
+    top: -2px;
+    font-size: clamp(34px, 8vw, 52px);
+    opacity: 0.14;
+  }
+
+  .row3{ grid-template-columns: 1fr; }
+  .row2{ grid-template-columns: 1fr; }
+
+  .right{
+    padding-left: clamp(18px, 2.4vw, 44px);
+    padding-right: clamp(18px, 2.4vw, 44px);
+  }
+
+  .rightInner{ padding-top: 0; }
+}
+.wrap{
+  width: min(1480px, 100%); /* 1320 → 1480 */
+}
+.frame{
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr); /* 0.94/1.06 → 0.88/1.12 */
+}
+.form{
+  max-width: 620px; /* 560 → 620 */
+}
