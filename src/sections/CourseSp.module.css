@@ -436,3 +436,17 @@
   opacity: .9;
   pointer-events:none;
 }
+/* --- SPスクロールの“引っかかり”対策 -----------------
+   iOS Safari / Android Chrome はアドレスバー伸縮で vh が揺れる。
+   svh（small viewport height）で値を固定してレイアウト再計算を止める。
+------------------------------------------------------ */
+@supports (height: 1svh){
+  .section{
+    padding-top: clamp(120px, 16svh, 190px);
+    padding-bottom: clamp(140px, 18svh, 220px);
+  }
+  .section::before,
+  .section::after{
+    height: clamp(56px, 7svh, 120px);
+  }
+}
